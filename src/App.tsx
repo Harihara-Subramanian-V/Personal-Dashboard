@@ -5,15 +5,18 @@ import { HeroSection } from './components/HeroSection';
 import { ProjectsSection } from './components/ProjectsSection';
 import { SkillDefenseMatrix } from './components/SkillDefenseMatrix';
 import { AchievementsSection } from './components/AchievementsSection';
+import { PhotoGallerySection } from './components/PhotoGallerySection';
 import { CyberTerminal } from './components/CyberTerminal';
 import { SlideOverCommsDrawer } from './components/SlideOverCommsDrawer';
 import { ResumeDossierModal } from './components/ResumeDossierModal';
 import { WirelessDeviceScanner } from './components/WirelessDeviceScanner';
 import { CyberStarShooter } from './components/CyberStarShooter';
+import { IntroScreen } from './components/IntroScreen';
 import { CustomCursor } from './components/CustomCursor';
 import { Terminal, Mail } from 'lucide-react';
 
 export function App() {
+  const [showIntro, setShowIntro] = useState<boolean>(true);
   const [activeLayer, setActiveLayer] = useState<DashboardLayer>('overview');
   const [isResumeOpen, setIsResumeOpen] = useState<boolean>(false);
   const [isRfScannerOpen, setIsRfScannerOpen] = useState<boolean>(false);
@@ -39,6 +42,16 @@ export function App() {
     setActiveLayer('projects');
   };
 
+  // If user hasn't clicked into the dashboard yet, show the minimalist Hero Name Splash Gate
+  if (showIntro) {
+    return (
+      <>
+        <CustomCursor />
+        <IntroScreen onEnter={() => setShowIntro(false)} />
+      </>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#070709] text-[#f0f2f5] relative font-rajdhani selection:bg-orange-500 selection:text-black">
       {/* Custom Cyber Reticle Cursor */}
@@ -58,8 +71,8 @@ export function App() {
           onOpenComms={() => setIsCommsOpen(true)}
         />
 
-        {/* Tactical Layer Body Viewports (Only active layer is rendered) */}
-        <main className="flex-1 max-w-7xl mx-auto px-4 py-4 w-full">
+        {/* Tactical Layer Body Viewports */}
+        <main className="flex-1 max-w-7xl mx-auto px-4 py-3 w-full">
           {/* LAYER 01: OVERVIEW & BIOGRAPHY */}
           {activeLayer === 'overview' && (
             <div className="animate-in fade-in duration-200">
@@ -82,7 +95,7 @@ export function App() {
             </div>
           )}
 
-          {/* LAYER 03: CAPABILITIES & HARDWARE MATRIX */}
+          {/* LAYER 03: CAPABILITIES & HARDWARE MATRIX (Graph Only as requested) */}
           {activeLayer === 'capabilities' && (
             <div className="animate-in fade-in duration-200">
               <SkillDefenseMatrix />
@@ -96,13 +109,20 @@ export function App() {
             </div>
           )}
 
-          {/* LAYER 05: ROOT DEFENSE CLI TERMINAL */}
+          {/* LAYER 05: FIELD PHOTO GALLERY */}
+          {activeLayer === 'gallery' && (
+            <div className="animate-in fade-in duration-200">
+              <PhotoGallerySection />
+            </div>
+          )}
+
+          {/* LAYER 06: ROOT DEFENSE CLI TERMINAL */}
           {activeLayer === 'terminal' && (
             <div className="animate-in fade-in duration-200 max-w-5xl mx-auto space-y-4">
               <div className="border-b border-orange-500/30 pb-2 flex items-center justify-between font-mono">
                 <div>
                   <div className="text-xs text-orange-400 font-bold uppercase flex items-center gap-2">
-                    <Terminal className="w-4 h-4" /> [SECTION 05] // ROOT COMMAND LINE ACCESS
+                    <Terminal className="w-4 h-4" /> [SECTION 06] // ROOT COMMAND LINE ACCESS
                   </div>
                   <h2 className="font-orbitron font-black text-xl sm:text-2xl text-white mt-0.5">
                     INTERACTIVE DEFENSE CONSOLE
@@ -124,13 +144,13 @@ export function App() {
             </div>
           )}
 
-          {/* LAYER 06: ENCRYPTED COMMS & TRANSMISSION */}
+          {/* LAYER 07: ENCRYPTED COMMS & TRANSMISSION */}
           {activeLayer === 'contact' && (
             <div className="animate-in fade-in duration-200 max-w-3xl mx-auto space-y-4 font-mono text-xs">
               <div className="border-b border-orange-500/30 pb-2 flex items-center justify-between">
                 <div>
                   <div className="text-xs text-emerald-400 font-bold uppercase flex items-center gap-2">
-                    <Mail className="w-4 h-4" /> [SECTION 06] // ENCRYPTED COMMS BEACON
+                    <Mail className="w-4 h-4" /> [SECTION 07] // ENCRYPTED COMMS BEACON
                   </div>
                   <h2 className="font-orbitron font-black text-xl text-white mt-0.5">
                     ESTABLISH DIRECT TRANSMISSION
@@ -205,14 +225,27 @@ export function App() {
                 04_HONORS
               </button>
               <button
+                onClick={() => setActiveLayer('gallery')}
+                className={`px-2 py-0.5 border ${activeLayer === 'gallery' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
+              >
+                05_GALLERY
+              </button>
+              <button
                 onClick={() => setActiveLayer('terminal')}
                 className={`px-2 py-0.5 border ${activeLayer === 'terminal' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
               >
-                05_CLI
+                06_CLI
               </button>
             </div>
 
             <div className="flex items-center gap-2">
+              <button
+                onClick={() => setShowIntro(true)}
+                className="px-2 py-1 bg-black hover:bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white text-[10px] font-mono"
+                title="Return to Name Splash Gate"
+              >
+                [GATE SCREEN]
+              </button>
               <button
                 onClick={() => setIsCommsOpen(true)}
                 className="px-2.5 py-1 bg-neutral-900 hover:bg-orange-500 hover:text-black border border-orange-500/40 text-orange-400 text-[11px] font-bold font-orbitron"
@@ -231,7 +264,7 @@ export function App() {
         onOpen={() => setIsCommsOpen(true)}
       />
 
-      {/* CV Dossier Modal (View freely, PIN on download) */}
+      {/* CV Dossier Modal */}
       <ResumeDossierModal
         isOpen={isResumeOpen}
         onClose={() => setIsResumeOpen(false)}

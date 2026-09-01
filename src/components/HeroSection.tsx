@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Trophy, Bot, Cpu, Radio, Layers, ShieldCheck, Terminal, Award, Mail } from 'lucide-react';
+import { ArrowRight, Trophy, Bot, Cpu, Radio, Layers, ShieldCheck, Terminal, Award, Mail, BarChart2, Camera, ChevronDown, ChevronUp } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './CyberIcons';
 import { CyberVCardFlip } from './CyberVCardFlip';
+import { CapabilitiesRadarGraph } from './CapabilitiesRadarGraph';
 import { PROFILE_INFO } from '../data/profileData';
 import type { DashboardLayer } from './HudHeader';
 
@@ -33,6 +34,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 }) => {
   const [activeIdx, setActiveIdx] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [showHomeGraph, setShowHomeGraph] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -46,8 +48,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   }, []);
 
   return (
-    <section id="overview" className="relative py-4 sm:py-6 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    <section id="overview" className="relative py-2 sm:py-4 overflow-hidden space-y-6">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Col: Engineering Dossier & Bio */}
         <div className="lg:col-span-7 space-y-4 text-left">
           {/* Multi-Discipline Tag Ribbon */}
@@ -62,33 +64,33 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <span>NPTEL ETHICAL HACKING</span>
             </div>
 
-            <div className="inline-flex items-center gap-1.5 px-2 py-1 bg-orange-500/15 border border-orange-500/40 text-orange-400 font-bold">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-orange-500/15 border border-orange-500/40 text-orange-400 font-bold">
               <Bot className="w-3.5 h-3.5 text-orange-400" />
               <span>ROBOTICS & SOCCER SEMIS</span>
             </div>
 
-            <div className="inline-flex items-center gap-1.5 px-2 py-1 bg-black border border-neutral-800 text-neutral-400 text-[11px]">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-black border border-neutral-800 text-neutral-400 text-[11px]">
               <Cpu className="w-3 h-3 text-orange-400" />
               <span>VIT VELLORE IT</span>
             </div>
           </div>
 
-          {/* Sharp Hero Title */}
-          <div className="space-y-2">
+          {/* 2-Line Hero Name */}
+          <div className="space-y-1.5">
             <div className="flex items-center gap-2 text-[10px] sm:text-xs font-mono text-orange-400 font-bold tracking-widest uppercase">
               <span className="w-2 h-2 bg-emerald-400 inline-block shrink-0" />
               <span>OPERATOR CLEARANCE: ROOT / DEFCON 1</span>
             </div>
 
             <div>
-              <h1 className="font-orbitron font-black text-2xl xs:text-3xl sm:text-4xl lg:text-5xl tracking-tight uppercase select-none leading-tight break-words">
-                <span className="text-white">HARIHARA </span>
-                <span className="text-orange-400">SUBRAMANIAN V</span>
+              <h1 className="font-orbitron font-black text-3xl xs:text-4xl sm:text-5xl lg:text-6xl tracking-tight uppercase select-none leading-none break-words">
+                <span className="text-white block">HARIHARA</span>
+                <span className="text-orange-400 block mt-1">SUBRAMANIAN V</span>
               </h1>
             </div>
 
             {/* Rotating Subtitle Credential Pill */}
-            <div className="min-h-[2.2rem] flex items-center">
+            <div className="min-h-[2.2rem] flex items-center pt-1">
               <div className="bg-black px-3 py-1.5 border border-orange-500/40 flex items-center gap-2 font-mono text-[11px] sm:text-xs text-orange-300 max-w-full">
                 <span className="text-emerald-400 font-bold shrink-0">▶</span>
                 <span
@@ -141,10 +143,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </button>
 
             <button
-              onClick={() => onNavigateLayer('capabilities')}
-              className="cyber-btn cyber-btn-outline text-xs py-2.5 px-4 justify-center"
+              onClick={() => setShowHomeGraph((prev) => !prev)}
+              className={`cyber-btn text-xs py-2.5 px-4 justify-center border font-bold ${
+                showHomeGraph
+                  ? 'bg-orange-500 text-black border-orange-400'
+                  : 'cyber-btn-outline'
+              }`}
             >
-              <span>SYSTEM CAPABILITIES</span>
+              <BarChart2 className="w-3.5 h-3.5" />
+              <span>{showHomeGraph ? '[-] HIDE GRAPH' : '[+] RENDER CAPABILITIES GRAPH'}</span>
+              {showHomeGraph ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
             </button>
 
             <button
@@ -155,7 +163,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </button>
           </div>
 
-          {/* Social Links & Comms */}
+          {/* Channels */}
           <div className="flex items-center gap-4 pt-1 text-neutral-400 font-mono text-xs">
             <span className="text-orange-400 font-bold">CHANNELS:</span>
             <a
@@ -183,7 +191,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </div>
 
-        {/* Right Col: Tactical Layer Switcher Deck & Hardware Telemetry */}
+        {/* Right Col: Tactical Layer Switcher Deck */}
         <div className="lg:col-span-5 space-y-3 font-mono text-xs">
           <div className="cyber-card p-4 border border-orange-500/40 space-y-3">
             <div className="flex items-center justify-between border-b border-orange-500/30 pb-2">
@@ -205,10 +213,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   <Layers className="w-4 h-4 text-orange-400 group-hover:text-emerald-400" />
                   <div>
                     <div className="font-orbitron font-bold text-white text-xs group-hover:text-orange-400">
-                      [LAYER 02] MISSIONS & REPOSITORIES
+                      [02] MISSIONS & LABS
                     </div>
                     <div className="text-[10px] text-neutral-400">
-                      9 Verified Repos • SpeakSafe • GyroBot • Flight Booking
+                      SpeakSafe • GyroBot • Flight Booking • 9 Repos
                     </div>
                   </div>
                 </div>
@@ -223,10 +231,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   <ShieldCheck className="w-4 h-4 text-orange-400 group-hover:text-emerald-400" />
                   <div>
                     <div className="font-orbitron font-bold text-white text-xs group-hover:text-orange-400">
-                      [LAYER 03] CAPABILITIES & HARDWARE GRAPH
+                      [03] CAPABILITIES GRAPH
                     </div>
                     <div className="text-[10px] text-neutral-400">
-                      Single Interactive Radar Plot • ESP32 • AI-CV • Python
+                      Interactive Radar Plot & Hardware Specs
                     </div>
                   </div>
                 </div>
@@ -241,10 +249,28 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   <Award className="w-4 h-4 text-orange-400 group-hover:text-emerald-400" />
                   <div>
                     <div className="font-orbitron font-bold text-white text-xs group-hover:text-orange-400">
-                      [LAYER 04] HONORS & RESEARCH PAPERS
+                      [04] HONORS & RESEARCH PAPERS
                     </div>
                     <div className="text-[10px] text-neutral-400">
-                      4 Computational Preprints • Echo Prometheus • Robo Soccer
+                      4 Research Preprints • Echo Prometheus • Robo Soccer
+                    </div>
+                  </div>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-neutral-500 group-hover:text-orange-400" />
+              </button>
+
+              <button
+                onClick={() => onNavigateLayer('gallery')}
+                className="p-2.5 bg-black hover:bg-neutral-900 border border-neutral-800 hover:border-orange-400 text-left transition-all flex items-center justify-between group"
+              >
+                <div className="flex items-center gap-2">
+                  <Camera className="w-4 h-4 text-orange-400 group-hover:text-emerald-400" />
+                  <div>
+                    <div className="font-orbitron font-bold text-white text-xs group-hover:text-orange-400">
+                      [05] FIELD PHOTO GALLERY
+                    </div>
+                    <div className="text-[10px] text-neutral-400">
+                      Robotics Labs, Hardware Bench & Event Frames
                     </div>
                   </div>
                 </div>
@@ -259,10 +285,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   <Terminal className="w-4 h-4 text-orange-400 group-hover:text-emerald-400" />
                   <div>
                     <div className="font-orbitron font-bold text-white text-xs group-hover:text-orange-400">
-                      [LAYER 05] ROOT DEFENSE CLI
+                      [06] ROOT DEFENSE CLI
                     </div>
                     <div className="text-[10px] text-neutral-400">
-                      Interactive Command Shell • Secret Arcade Shooter
+                      Interactive Shell • Direct Repo Launcher
                     </div>
                   </div>
                 </div>
@@ -280,10 +306,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   <Mail className="w-4 h-4 text-orange-400 group-hover:text-emerald-400" />
                   <div>
                     <div className="font-orbitron font-bold text-white text-xs group-hover:text-orange-400">
-                      [LAYER 06] ENCRYPTED TRANSMISSION
+                      [07] ENCRYPTED TRANSMISSION
                     </div>
                     <div className="text-[10px] text-neutral-400">
-                      Quick Comms Link • Direct Dispatch • Phone: +91 93423 46217
+                      Quick Comms Link • Phone: +91 93423 46217
                     </div>
                   </div>
                 </div>
@@ -312,6 +338,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </div>
       </div>
+
+      {/* On-Demand Capabilities Radar Graph (Renders when user clicks button on Home/Overview) */}
+      {showHomeGraph && (
+        <div className="max-w-7xl mx-auto pt-2 animate-in fade-in duration-300">
+          <div className="flex items-center justify-between bg-black px-4 py-2 border border-orange-500/50 mb-2 font-mono text-xs">
+            <span className="text-orange-400 font-bold">[OVERVIEW PLOT // SYSTEM CAPABILITIES & HARDWARE MATRIX]</span>
+            <button
+              onClick={() => setShowHomeGraph(false)}
+              className="text-neutral-400 hover:text-white font-bold"
+            >
+              [✕ CLOSE PLOT]
+            </button>
+          </div>
+          <CapabilitiesRadarGraph />
+        </div>
+      )}
     </section>
   );
 };

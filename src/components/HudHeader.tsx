@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, Menu, X, Radio } from 'lucide-react';
 
-export type DashboardLayer = 'overview' | 'projects' | 'capabilities' | 'achievements' | 'terminal' | 'contact';
+export type DashboardLayer = 'overview' | 'projects' | 'capabilities' | 'achievements' | 'gallery' | 'terminal' | 'contact';
 
 interface HudHeaderProps {
   activeLayer: DashboardLayer;
@@ -61,8 +61,9 @@ export const HudHeader: React.FC<HudHeaderProps> = ({
     { id: 'projects', label: '02_MISSIONS & LABS' },
     { id: 'capabilities', label: '03_CAPABILITIES' },
     { id: 'achievements', label: '04_HONORS & PAPERS' },
-    { id: 'terminal', label: '05_ROOT_CLI' },
-    { id: 'contact', label: '06_TRANSMISSION' },
+    { id: 'gallery', label: '05_GALLERY' },
+    { id: 'terminal', label: '06_ROOT_CLI' },
+    { id: 'contact', label: '07_TRANSMISSION' },
   ];
 
   const handleNavClick = (layerId: DashboardLayer) => {
@@ -128,7 +129,7 @@ export const HudHeader: React.FC<HudHeaderProps> = ({
               <button
                 key={layer.id}
                 onClick={() => handleNavClick(layer.id)}
-                className={`px-3 py-1.5 transition-all text-[11px] font-bold border uppercase ${
+                className={`px-2.5 py-1.5 transition-all text-[11px] font-bold border uppercase ${
                   isActive
                     ? 'bg-orange-500 text-black border-orange-400 shadow-sm'
                     : 'bg-black/60 text-neutral-400 hover:text-white border-neutral-800 hover:border-orange-500/50'

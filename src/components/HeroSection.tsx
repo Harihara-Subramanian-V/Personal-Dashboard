@@ -52,8 +52,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Col: Engineering Dossier & Bio */}
         <div className="lg:col-span-7 space-y-4 text-left">
-          {/* Multi-Discipline Tag Ribbon */}
-          <div className="flex flex-wrap items-center gap-1.5 font-mono text-xs">
+          {/* 1. Multi-Discipline Tag Ribbon (Staggered Entrance 1) */}
+          <div className="flex flex-wrap items-center gap-1.5 font-mono text-xs animate-stagger-1">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/15 border border-amber-500/40 text-amber-300 font-bold">
               <Trophy className="w-3.5 h-3.5 text-amber-400" />
               <span>IIT MADRAS DUAL BS (DATA SCIENCE)</span>
@@ -75,22 +75,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
           </div>
 
-          {/* 2-Line Hero Name */}
+          {/* 2. 2-Line Hero Name (Drifts into position smoothly) */}
           <div className="space-y-1.5">
-            <div className="flex items-center gap-2 text-[10px] sm:text-xs font-mono text-orange-400 font-bold tracking-widest uppercase">
+            <div className="flex items-center gap-2 text-[10px] sm:text-xs font-mono text-orange-400 font-bold tracking-widest uppercase animate-stagger-1">
               <span className="w-2 h-2 bg-emerald-400 inline-block shrink-0" />
               <span>OPERATOR CLEARANCE: ROOT / DEFCON 1</span>
             </div>
 
-            <div>
+            <div className="transition-all duration-700 ease-out">
               <h1 className="font-orbitron font-black text-3xl xs:text-4xl sm:text-5xl lg:text-6xl tracking-tight uppercase select-none leading-none break-words">
                 <span className="text-white block">HARIHARA</span>
                 <span className="text-orange-400 block mt-1">SUBRAMANIAN V</span>
               </h1>
             </div>
 
-            {/* Rotating Subtitle Credential Pill */}
-            <div className="min-h-[2.2rem] flex items-center pt-1">
+            {/* 3. Rotating Subtitle Credential Pill (Staggered Entrance 2) */}
+            <div className="min-h-[2.2rem] flex items-center pt-1 animate-stagger-2">
               <div className="bg-black px-3 py-1.5 border border-orange-500/40 flex items-center gap-2 font-mono text-[11px] sm:text-xs text-orange-300 max-w-full">
                 <span className="text-emerald-400 font-bold shrink-0">▶</span>
                 <span
@@ -103,17 +103,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </div>
             </div>
 
-            {/* Interactive 3D Flip Operator vCard */}
-            <CyberVCardFlip />
+            {/* 4. Interactive 3D Flip Operator vCard (Staggered Entrance 3) */}
+            <div className="animate-stagger-3">
+              <CyberVCardFlip />
+            </div>
           </div>
 
-          {/* Profile Overview Description */}
-          <p className="text-neutral-300 text-xs sm:text-sm font-sans leading-relaxed max-w-2xl border-l-2 border-orange-500/50 pl-3">
+          {/* 5. Profile Overview Description (Staggered Entrance 4) */}
+          <p className="text-neutral-300 text-xs sm:text-sm font-sans leading-relaxed max-w-2xl border-l-2 border-orange-500/50 pl-3 animate-stagger-4">
             {PROFILE_INFO.bioSummary}
           </p>
 
-          {/* Tactical Stat Pills */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+          {/* 6. Tactical Stat Pills (Staggered Entrance 5) */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 animate-stagger-5">
             <div className="bg-black p-2 border border-orange-500/30 text-center font-mono">
               <div className="text-[9px] text-neutral-400 uppercase">HARDWARE NODES</div>
               <div className="text-sm sm:text-base font-orbitron font-bold text-orange-400">ESP32 / AVR</div>
@@ -132,8 +134,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
           </div>
 
-          {/* Action CTAs */}
-          <div className="flex flex-col xs:flex-row flex-wrap items-stretch xs:items-center gap-2 pt-1">
+          {/* 7. Action CTAs (Staggered Entrance 6) */}
+          <div className="flex flex-col xs:flex-row flex-wrap items-stretch xs:items-center gap-2 pt-1 animate-stagger-6">
             <button
               onClick={() => onNavigateLayer('projects')}
               className="cyber-btn cyber-btn-solid text-xs py-2.5 px-5 font-bold justify-center"
@@ -163,8 +165,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </button>
           </div>
 
-          {/* Channels */}
-          <div className="flex items-center gap-4 pt-1 text-neutral-400 font-mono text-xs">
+          {/* 8. Channels (Staggered Entrance 7) */}
+          <div className="flex items-center gap-4 pt-1 text-neutral-400 font-mono text-xs animate-stagger-7">
             <span className="text-orange-400 font-bold">CHANNELS:</span>
             <a
               href={PROFILE_INFO.github}
@@ -191,8 +193,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </div>
 
-        {/* Right Col: Tactical Layer Switcher Deck */}
-        <div className="lg:col-span-5 space-y-3 font-mono text-xs">
+        {/* Right Col: Tactical Layer Switcher Deck (Staggered Entrance 6) */}
+        <div className="lg:col-span-5 space-y-3 font-mono text-xs animate-stagger-6">
           <div className="cyber-card p-4 border border-orange-500/40 space-y-3">
             <div className="flex items-center justify-between border-b border-orange-500/30 pb-2">
               <div className="flex items-center gap-2">

@@ -76,7 +76,7 @@ export const HudHeader: React.FC<HudHeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#070709]/95 backdrop-blur-md border-b border-orange-500/40 font-mono text-xs select-none">
+    <header className="sticky top-0 z-40 w-full bg-[#070709]/95 backdrop-blur-md border-b border-orange-500/40 font-mono text-xs select-none animate-stagger-1">
       {/* Top Micro-Telemetry Status Ribbon */}
       <div className="hidden md:flex items-center justify-between px-4 py-1 bg-black border-b border-neutral-900 text-[10px] text-neutral-400">
         <div className="flex items-center gap-3">

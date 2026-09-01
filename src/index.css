@@ -195,3 +195,25 @@
   border-bottom: 2px solid #ff6b00;
   border-right: 2px solid #ff6b00;
 }
+
+/* Cinematic Staggered Entrance Animations */
+@keyframes staggerFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-stagger-1 { animation: staggerFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both; }
+.animate-stagger-2 { animation: staggerFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both; }
+.animate-stagger-3 { animation: staggerFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.45s both; }
+.animate-stagger-4 { animation: staggerFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both; }
+.animate-stagger-5 { animation: staggerFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.75s both; }
+.animate-stagger-6 { animation: staggerFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.9s both; }
+.animate-stagger-7 { animation: staggerFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1.05s both; }
+.animate-stagger-8 { animation: staggerFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1.2s both; }
+

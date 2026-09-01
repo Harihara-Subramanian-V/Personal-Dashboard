@@ -60,7 +60,7 @@ export const SkillDefenseMatrix: React.FC = () => {
           </div>
 
           {/* Category Tabs */}
-          <div className="flex flex-wrap gap-1.5 font-mono text-xs">
+          <div className="flex overflow-x-auto no-scrollbar sm:flex-wrap gap-1.5 font-mono text-xs pb-1 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
             {categories.map((cat) => (
               <button
                 key={cat.id}
@@ -68,10 +68,10 @@ export const SkillDefenseMatrix: React.FC = () => {
                   cyberAudio.playClick();
                   setSelectedCategory(cat.id as typeof selectedCategory);
                 }}
-                className={`px-3 py-1.5 rounded transition-all uppercase ${
+                className={`px-3 py-1.5 rounded transition-all uppercase shrink-0 text-[11px] sm:text-xs ${
                   selectedCategory === cat.id
                     ? 'bg-orange-500 text-black font-bold shadow-md shadow-orange-500/30'
-                    : 'bg-black/50 border border-orange-500/30 text-neutral-400 hover:text-white hover:border-orange-400'
+                    : 'bg-black/50 border border-orange-500/30 text-neutral-400 hover:text-white hover:border-emerald-400'
                 }`}
               >
                 {cat.label}

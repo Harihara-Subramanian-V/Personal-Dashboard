@@ -58,7 +58,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
           </div>
 
           {/* Category Filter Chips */}
-          <div className="flex flex-wrap gap-1.5 font-mono text-xs">
+          <div className="flex overflow-x-auto no-scrollbar sm:flex-wrap gap-1.5 font-mono text-xs pb-1 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0">
             {[
               { id: 'ALL', label: 'ALL MISSIONS' },
               { id: 'AI_ML_CV', label: 'AI & VISION' },
@@ -72,7 +72,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                   cyberAudio.playClick();
                   setFilter(cat.id as ProjectCategory);
                 }}
-                className={`px-3 py-1.5 rounded transition-all uppercase ${
+                className={`px-3 py-1.5 rounded transition-all uppercase shrink-0 text-[11px] sm:text-xs ${
                   filter === cat.id
                     ? 'bg-orange-500 text-black font-bold shadow-md shadow-orange-500/30'
                     : 'bg-black/50 border border-orange-500/30 text-neutral-400 hover:text-white hover:border-emerald-400'
@@ -85,16 +85,16 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
         </div>
 
         {/* Project Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           {filteredProjects.map((project) => (
             <div
               key={project.id}
-              className="cyber-card rounded-lg p-5 flex flex-col justify-between group hover:border-emerald-500/60 hover:shadow-lg hover:shadow-emerald-500/10 transition-all space-y-4"
+              className="cyber-card rounded-lg p-4 sm:p-5 flex flex-col justify-between group hover:border-emerald-500/60 hover:shadow-lg hover:shadow-emerald-500/10 transition-all space-y-3 sm:space-y-4"
             >
-              <div className="space-y-3">
+              <div className="space-y-2.5 sm:space-y-3">
                 {/* Header Tag */}
                 <div className="flex items-center justify-between text-[11px] font-mono">
-                  <span className="px-2 py-0.5 rounded bg-orange-500/15 border border-orange-500/40 text-orange-400 font-bold">
+                  <span className="px-2 py-0.5 rounded bg-orange-500/15 border border-orange-500/40 text-orange-400 font-bold text-[10px] sm:text-[11px]">
                     {project.codename}
                   </span>
                   <span className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-semibold">
@@ -104,10 +104,10 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
 
                 {/* Title */}
                 <div>
-                  <h3 className="font-orbitron font-bold text-lg text-white group-hover:text-emerald-400 transition-colors">
+                  <h3 className="font-orbitron font-bold text-base sm:text-lg text-white group-hover:text-emerald-400 transition-colors">
                     {project.title}
                   </h3>
-                  <div className="text-[11px] font-mono text-neutral-400 mt-0.5">
+                  <div className="text-[10px] sm:text-[11px] font-mono text-neutral-400 mt-0.5">
                     // Category: <span className="text-orange-400 font-semibold">{project.categoryLabel}</span>
                   </div>
                 </div>

@@ -76,16 +76,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
           {/* Clean, Stable, Rock-Solid Hero Title with Silky Sheen Sweep (Zero Jitter) */}
           <div className="space-y-3">
-            <div className="flex items-center gap-2 text-xs font-mono text-orange-400 font-bold tracking-widest uppercase">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping inline-block" />
+            <div className="flex items-center gap-2 text-[10px] sm:text-xs font-mono text-orange-400 font-bold tracking-widest uppercase">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping inline-block shrink-0" />
               <span>OPERATOR CLEARANCE: ROOT / DEFCON 1</span>
             </div>
 
             <div
-              className="light-sheen-sweep inline-block rounded-lg"
+              className="light-sheen-sweep inline-block rounded-lg max-w-full"
               onMouseEnter={() => cyberAudio.playHover()}
             >
-              <h1 className="font-orbitron font-black text-3xl sm:text-5xl lg:text-6xl tracking-tight uppercase select-none transition-all hero-glow-title leading-tight">
+              <h1 className="font-orbitron font-black text-2xl xs:text-3xl sm:text-5xl lg:text-6xl tracking-tight uppercase select-none transition-all hero-glow-title leading-tight break-words">
                 <span className="text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.25)]">
                   HARIHARA{' '}
                 </span>
@@ -96,11 +96,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
 
             {/* Silky-Smooth Fade & Slide Subtitle Badge (No layout jumping) */}
-            <div className="h-10 flex items-center">
-              <div className="bg-black/75 px-3.5 py-1.5 rounded-md border border-orange-500/30 flex items-center gap-2 font-mono text-xs sm:text-sm text-orange-300 shadow-md shadow-orange-500/10">
-                <span className="text-emerald-400 font-bold">▶</span>
+            <div className="min-h-[2.5rem] flex items-center">
+              <div className="bg-black/75 px-3 py-1.5 sm:px-3.5 rounded-md border border-orange-500/30 flex items-center gap-2 font-mono text-[11px] sm:text-sm text-orange-300 shadow-md shadow-orange-500/10 max-w-full">
+                <span className="text-emerald-400 font-bold shrink-0">▶</span>
                 <span
-                  className={`transition-all duration-300 transform font-semibold ${
+                  className={`transition-all duration-300 transform font-semibold leading-snug ${
                     isAnimating
                       ? 'opacity-0 translate-y-1.5 scale-98'
                       : 'opacity-100 translate-y-0 scale-100 text-neutral-100'
@@ -116,35 +116,35 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
 
           {/* Profile Overview Description */}
-          <p className="text-neutral-300 text-sm sm:text-base font-sans leading-relaxed max-w-2xl border-l-2 border-orange-500/40 pl-3.5">
+          <p className="text-neutral-300 text-xs sm:text-base font-sans leading-relaxed max-w-2xl border-l-2 border-orange-500/40 pl-3 sm:pl-3.5">
             {PROFILE_INFO.bioSummary}
           </p>
 
           {/* Tactical Engineering Stat Pills */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
-            <div className="bg-black/70 p-2.5 rounded border border-orange-500/30 text-center font-mono hover:border-orange-500/60 transition-colors shadow-sm shadow-orange-500/10">
-              <div className="text-[10px] text-neutral-400 uppercase">HARDWARE NODES</div>
-              <div className="text-base sm:text-lg font-orbitron font-bold text-orange-400">ESP32 / AVR</div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5 pt-1">
+            <div className="bg-black/70 p-2 sm:p-2.5 rounded border border-orange-500/30 text-center font-mono hover:border-orange-500/60 transition-colors shadow-sm shadow-orange-500/10">
+              <div className="text-[9px] sm:text-[10px] text-neutral-400 uppercase">HARDWARE NODES</div>
+              <div className="text-sm sm:text-lg font-orbitron font-bold text-orange-400">ESP32 / AVR</div>
             </div>
-            <div className="bg-black/70 p-2.5 rounded border border-orange-500/30 text-center font-mono hover:border-orange-500/60 transition-colors shadow-sm shadow-orange-500/10">
-              <div className="text-[10px] text-neutral-400 uppercase">RESEARCH PAPERS</div>
-              <div className="text-base sm:text-lg font-orbitron font-bold text-orange-400">4 Active</div>
+            <div className="bg-black/70 p-2 sm:p-2.5 rounded border border-orange-500/30 text-center font-mono hover:border-orange-500/60 transition-colors shadow-sm shadow-orange-500/10">
+              <div className="text-[9px] sm:text-[10px] text-neutral-400 uppercase">RESEARCH PAPERS</div>
+              <div className="text-sm sm:text-lg font-orbitron font-bold text-orange-400">4 Active</div>
             </div>
-            <div className="bg-black/70 p-2.5 rounded border border-orange-500/30 text-center font-mono hover:border-orange-500/60 transition-colors shadow-sm shadow-orange-500/10">
-              <div className="text-[10px] text-neutral-400 uppercase">REPOSITORIES</div>
-              <div className="text-base sm:text-lg font-orbitron font-bold text-orange-400">9+ Repos</div>
+            <div className="bg-black/70 p-2 sm:p-2.5 rounded border border-orange-500/30 text-center font-mono hover:border-orange-500/60 transition-colors shadow-sm shadow-orange-500/10">
+              <div className="text-[9px] sm:text-[10px] text-neutral-400 uppercase">REPOSITORIES</div>
+              <div className="text-sm sm:text-lg font-orbitron font-bold text-orange-400">11+ Repos</div>
             </div>
-            <div className="bg-black/70 p-2.5 rounded border border-orange-500/30 text-center font-mono hover:border-orange-500/60 transition-colors shadow-sm shadow-orange-500/10">
-              <div className="text-[10px] text-neutral-400 uppercase">CORE STACK</div>
-              <div className="text-base sm:text-lg font-orbitron font-bold text-emerald-400">Python • C++</div>
+            <div className="bg-black/70 p-2 sm:p-2.5 rounded border border-orange-500/30 text-center font-mono hover:border-orange-500/60 transition-colors shadow-sm shadow-orange-500/10">
+              <div className="text-[9px] sm:text-[10px] text-neutral-400 uppercase">CORE STACK</div>
+              <div className="text-sm sm:text-lg font-orbitron font-bold text-emerald-400">Python • C++</div>
             </div>
           </div>
 
           {/* Action CTAs */}
-          <div className="flex flex-wrap items-center gap-3 pt-2">
+          <div className="flex flex-col xs:flex-row flex-wrap items-stretch xs:items-center gap-2.5 sm:gap-3 pt-2">
             <button
               onClick={onExploreProjects}
-              className="cyber-btn cyber-btn-solid text-xs sm:text-sm py-3 px-6 font-bold shadow-lg shadow-orange-500/30"
+              className="cyber-btn cyber-btn-solid text-xs sm:text-sm py-2.5 sm:py-3 px-5 sm:px-6 font-bold shadow-lg shadow-orange-500/30 justify-center"
             >
               <span>EXPLORE MISSIONS & LABS</span>
               <ArrowRight className="w-4 h-4" />
@@ -156,7 +156,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   cyberAudio.playClick();
                   onOpenRfScanner();
                 }}
-                className="px-4 py-3 bg-black/80 hover:bg-orange-500/20 border border-orange-500/40 hover:border-orange-400 text-orange-400 font-orbitron font-bold rounded text-xs transition-all flex items-center gap-2"
+                className="px-3.5 sm:px-4 py-2.5 sm:py-3 bg-black/80 hover:bg-orange-500/20 border border-orange-500/40 hover:border-orange-400 text-orange-400 font-orbitron font-bold rounded text-xs transition-all flex items-center justify-center gap-2"
                 title="Open WiFi & Bluetooth BLE Discovery Scanner"
               >
                 <Radio className="w-4 h-4 animate-pulse" />
@@ -166,7 +166,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
             <button
               onClick={onOpenTerminal}
-              className="cyber-btn cyber-btn-outline text-xs sm:text-sm py-3 px-5"
+              className="cyber-btn cyber-btn-outline text-xs sm:text-sm py-2.5 sm:py-3 px-4 sm:px-5 justify-center"
             >
               <span>LAUNCH ROOT CLI</span>
             </button>

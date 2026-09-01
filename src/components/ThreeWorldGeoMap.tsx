@@ -328,8 +328,37 @@ export const ThreeWorldGeoMap: React.FC = () => {
       isDragging = false;
     };
 
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        isDragging = true;
+        previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (isDragging && e.touches.length === 1) {
+        const deltaX = e.touches[0].clientX - previousMousePosition.x;
+        const deltaY = e.touches[0].clientY - previousMousePosition.y;
+
+        globeGroup.rotation.y += deltaX * 0.008;
+        globeGroup.rotation.x += deltaY * 0.008;
+
+        velocityX = deltaX * 0.004;
+        velocityY = deltaY * 0.004;
+
+        previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }
+    };
+
+    const handleTouchEnd = () => {
+      isDragging = false;
+    };
+
     container.addEventListener('mousemove', handlePointerMove);
     container.addEventListener('mousedown', handlePointerDown);
+    container.addEventListener('touchstart', handleTouchStart, { passive: true });
+    container.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd);
     window.addEventListener('mouseup', handlePointerUp);
 
     // 4. Resize Handling
@@ -384,6 +413,9 @@ export const ThreeWorldGeoMap: React.FC = () => {
     return () => {
       container.removeEventListener('mousemove', handlePointerMove);
       container.removeEventListener('mousedown', handlePointerDown);
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
       window.removeEventListener('mouseup', handlePointerUp);
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameId);
@@ -395,36 +427,36 @@ export const ThreeWorldGeoMap: React.FC = () => {
   }, [deviceCoords]);
 
   return (
-    <div className="relative w-full max-w-[450px] h-[400px] sm:h-[460px] mx-auto flex items-center justify-center select-none">
+    <div className="relative w-full max-w-[450px] h-[310px] sm:h-[420px] md:h-[460px] mx-auto flex items-center justify-center select-none">
       {/* 2D Cyber HUD Reticle Overlays */}
       <div className="absolute inset-2 border border-orange-500/20 rounded-full animate-radar pointer-events-none" />
-      <div className="absolute inset-8 border border-dashed border-orange-500/30 rounded-full animate-spin [animation-duration:45s] pointer-events-none" />
+      <div className="absolute inset-6 sm:inset-8 border border-dashed border-orange-500/30 rounded-full animate-spin [animation-duration:45s] pointer-events-none" />
 
       {/* 3D WebGL Canvas */}
       <div
         ref={containerRef}
-        className="w-full h-full cursor-grab active:cursor-grabbing z-10"
-        title="Interactive 3D Holographic Globe: Drag to freely rotate"
+        className="w-full h-full cursor-grab active:cursor-grabbing z-10 touch-none"
+        title="Interactive 3D Holographic Globe: Drag or swipe to rotate"
       />
 
       {/* Location Pinpoint Telemetry Banner */}
-      <div className="absolute top-2 left-2 right-2 bg-black/85 backdrop-blur-md px-3 py-1.5 border border-orange-500/40 rounded flex items-center justify-between font-mono text-[10px] sm:text-[11px] pointer-events-none z-20">
+      <div className="absolute top-2 left-2 right-2 bg-black/85 backdrop-blur-md px-2.5 sm:px-3 py-1.5 border border-orange-500/40 rounded flex items-center justify-between font-mono text-[9px] sm:text-[11px] pointer-events-none z-20">
         <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
-          <MapPin className="w-3.5 h-3.5 animate-bounce text-emerald-400" />
+          <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 animate-bounce text-emerald-400" />
           <span>GEO_TARGET PINPOINTED</span>
         </div>
-        <div className="text-orange-400 font-bold truncate max-w-[210px]">
-          {isLiveGeo ? 'DEVICE LIVE NODE' : 'VIT VELLORE NODE (12.97° N, 79.16° E)'}
+        <div className="text-orange-400 font-bold truncate max-w-[170px] sm:max-w-[220px]">
+          {isLiveGeo ? 'DEVICE LIVE NODE' : 'VIT VELLORE (12.97° N, 79.16° E)'}
         </div>
       </div>
 
       {/* Bottom Telemetry HUD */}
-      <div className="absolute bottom-2 left-2 right-2 bg-black/85 backdrop-blur-md px-3 py-1.5 border border-neutral-800 rounded flex items-center justify-between font-mono text-[10px] text-neutral-400 pointer-events-none z-20">
-        <div className="flex items-center gap-2">
+      <div className="absolute bottom-2 left-2 right-2 bg-black/85 backdrop-blur-md px-2.5 sm:px-3 py-1.5 border border-neutral-800 rounded flex items-center justify-between font-mono text-[9px] sm:text-[10px] text-neutral-400 pointer-events-none z-20">
+        <div className="flex items-center gap-1.5">
           <Radio className="w-3 h-3 text-orange-500 animate-pulse" />
-          <span>GEO_ARCS: 5 TELEMETRY LINKS</span>
+          <span>GEO_ARCS: 5 NODES</span>
         </div>
-        <span className="text-orange-400">FREE DRAG ROTATION</span>
+        <span className="text-orange-400">TOUCH / DRAG SWIPE</span>
       </div>
     </div>
   );

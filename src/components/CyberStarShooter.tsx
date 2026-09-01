@@ -41,7 +41,14 @@ export const CyberStarShooter: React.FC<CyberStarShooterProps> = ({ isOpen, onCl
   const [score, setScore] = useState(0);
   const [health, setHealth] = useState(100);
   const [gameOver, setGameOver] = useState(false);
-  const [highScore, setHighScore] = useState(0);
+  const [highScore, setHighScore] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('cyber_star_shooter_highscore');
+      return saved ? parseInt(saved, 10) : 0;
+    } catch {
+      return 0;
+    }
+  });
 
   useEffect(() => {
     if (!isOpen) return;
@@ -82,6 +89,25 @@ export const CyberStarShooter: React.FC<CyberStarShooterProps> = ({ isOpen, onCl
     let currentHp = 100;
     let isDead = false;
 
+    let localHigh = 0;
+    try {
+      const saved = localStorage.getItem('cyber_star_shooter_highscore');
+      localHigh = saved ? parseInt(saved, 10) : 0;
+    } catch {
+      localHigh = 0;
+    }
+
+    const updateHighScore = (val: number) => {
+      if (val > localHigh) {
+        localHigh = val;
+        setHighScore(val);
+        try {
+          localStorage.setItem('cyber_star_shooter_highscore', String(val));
+          window.dispatchEvent(new CustomEvent('star_shooter_highscore_updated', { detail: val }));
+        } catch {}
+      }
+    };
+
     const spawnEnemy = () => {
       const isBoss = Math.random() < 0.12 && currentScore > 200;
       const type = isBoss ? 'boss' : Math.random() < 0.5 ? 'drone' : 'asteroid';
@@ -98,51 +124,10 @@ export const CyberStarShooter: React.FC<CyberStarShooterProps> = ({ isOpen, onCl
       });
     };
 
-    const shootBullet = () => {
-      cyberAudio.playClick();
-      bullets.push({ x: playerX - 12, y: playerY - 15, vx: 0, vy: -12 });
-      bullets.push({ x: playerX + 12, y: playerY - 15, vx: 0, vy: -12 });
-    };
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      keys[e.key] = true;
-      if (e.key === ' ' || e.key === 'Spacebar') {
-        const now = Date.now();
-        if (now - lastShotTime > 140 && !isDead) {
-          shootBullet();
-          lastShotTime = now;
-        }
-      }
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    const handleKeyUp = (e: KeyboardEvent) => {
-      keys[e.key] = false;
-    };
-
-    const handleMouseMove = (e: MouseEvent) => {
-      playerX = Math.max(30, Math.min(canvas.width - 30, e.clientX));
-    };
-
-    const handleMouseDown = () => {
-      const now = Date.now();
-      if (now - lastShotTime > 140 && !isDead) {
-        shootBullet();
-        lastShotTime = now;
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mousedown', handleMouseDown);
-
-    const createExplosion = (x: number, y: number, color: string, count: number = 18) => {
+    const createExplosion = (x: number, y: number, color: string, count = 12) => {
       for (let i = 0; i < count; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const spd = Math.random() * 5 + 2;
+        const spd = Math.random() * 4 + 1.5;
         particles.push({
           x,
           y,
@@ -150,33 +135,78 @@ export const CyberStarShooter: React.FC<CyberStarShooterProps> = ({ isOpen, onCl
           vy: Math.sin(angle) * spd,
           alpha: 1.0,
           color,
-          size: Math.random() * 3.5 + 1.5,
+          size: Math.random() * 3 + 1.5,
         });
       }
     };
 
+    const shoot = () => {
+      const now = Date.now();
+      if (now - lastShotTime > 160) {
+        bullets.push({
+          x: playerX - 12,
+          y: playerY - 14,
+          vx: 0,
+          vy: -11,
+        });
+        bullets.push({
+          x: playerX + 12,
+          y: playerY - 14,
+          vx: 0,
+          vy: -11,
+        });
+        cyberAudio.playClick();
+        lastShotTime = now;
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      keys[e.code] = true;
+      if (e.code === 'Space' && !isDead) {
+        e.preventDefault();
+        shoot();
+      }
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      keys[e.code] = false;
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      playerX = e.clientX;
+    };
+
+    const handleMouseDown = () => {
+      if (!isDead) shoot();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousedown', handleMouseDown);
+
     const loop = () => {
       animId = requestAnimationFrame(loop);
 
-      if (keys['ArrowLeft'] || keys['a'] || keys['A']) {
+      if (keys['ArrowLeft'] || keys['KeyA']) {
         playerX = Math.max(30, playerX - playerSpeed);
       }
-      if (keys['ArrowRight'] || keys['d'] || keys['D']) {
+      if (keys['ArrowRight'] || keys['KeyD']) {
         playerX = Math.min(canvas.width - 30, playerX + playerSpeed);
       }
 
-      ctx.fillStyle = '#05050a';
+      ctx.fillStyle = 'rgba(7, 7, 9, 0.35)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // 1. Draw Starfield
-      stars.forEach((s) => {
-        s.y += s.speed;
-        if (s.y > canvas.height) {
-          s.y = 0;
-          s.x = Math.random() * canvas.width;
-        }
-        ctx.fillStyle = s.speed > 2 ? '#ffa726' : '#ffffff';
-        ctx.fillRect(s.x, s.y, s.s, s.s);
+      ctx.fillStyle = '#ffffff';
+      stars.forEach((star) => {
+        star.y += star.speed;
+        if (star.y > canvas.height) star.y = 0;
+        ctx.fillRect(star.x, star.y, star.s, star.s);
       });
 
       // 2. Spawn Enemies
@@ -207,6 +237,7 @@ export const CyberStarShooter: React.FC<CyberStarShooterProps> = ({ isOpen, onCl
               enemies.splice(enIdx, 1);
               currentScore += en.type === 'boss' ? 50 : 10;
               setScore(currentScore);
+              updateHighScore(currentScore);
             }
           }
         });
@@ -256,7 +287,7 @@ export const CyberStarShooter: React.FC<CyberStarShooterProps> = ({ isOpen, onCl
             isDead = true;
             setGameOver(true);
             cyberAudio.playAlert();
-            setHighScore((prev) => Math.max(prev, currentScore));
+            updateHighScore(currentScore);
           }
         }
 

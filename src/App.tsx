@@ -91,7 +91,7 @@ export function App() {
         />
 
         {/* Main Body Viewports */}
-        <main className="flex-1 space-y-12 sm:space-y-16">
+        <main className="flex-1 space-y-6 sm:space-y-10">
           {/* Section 1: Hero Hologram Command */}
           <HeroSection
             onOpenTerminal={scrollToTerminal}
@@ -112,7 +112,7 @@ export function App() {
           <AchievementsSection />
 
           {/* Section 5: Interactive Root Hacker CLI Terminal */}
-          <section id="terminal" ref={terminalRef} className="py-12 sm:py-16">
+          <section id="terminal" ref={terminalRef} className="py-8 sm:py-12">
             <div className="max-w-5xl mx-auto px-4 space-y-4">
               <div className="border-b border-orange-500/30 pb-3 flex items-center justify-between">
                 <div>
@@ -141,7 +141,7 @@ export function App() {
         </main>
 
         {/* Cyberpunk Telemetry Footer */}
-        <footer className="mt-16 border-t border-orange-500/30 bg-black/90 py-8 px-4 font-mono text-xs text-neutral-400">
+        <footer className="mt-8 sm:mt-12 border-t border-orange-500/30 bg-black/90 py-6 px-4 font-mono text-xs text-neutral-400">
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="w-2.5 h-2.5 rounded-full bg-orange-500 animate-ping" />

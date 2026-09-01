@@ -44,8 +44,8 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   };
 
   return (
-    <section id="projects" className="py-12 sm:py-20 relative">
-      <div className="max-w-7xl mx-auto px-4 space-y-8">
+    <section id="projects" className="py-8 sm:py-12 relative">
+      <div className="max-w-7xl mx-auto px-4 space-y-6 sm:space-y-8">
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-orange-500/30 pb-4">
           <div>

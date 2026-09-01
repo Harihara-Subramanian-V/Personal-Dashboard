@@ -21,6 +21,14 @@ export const HudHeader: React.FC<HudHeaderProps> = ({
   const [isMuted, setIsMuted] = useState<boolean>(cyberAudio.getMuted());
   const [currentTime, setCurrentTime] = useState<string>('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const [gameHighScore, setGameHighScore] = useState<number>(() => {
+    try {
+      const s = localStorage.getItem('cyber_star_shooter_highscore');
+      return s ? parseInt(s, 10) : 0;
+    } catch {
+      return 0;
+    }
+  });
 
   useEffect(() => {
     const updateClock = () => {
@@ -38,6 +46,15 @@ export const HudHeader: React.FC<HudHeaderProps> = ({
     updateClock();
     const timer = setInterval(updateClock, 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const handleHighUpdate = (e: Event) => {
+      const custom = e as CustomEvent<number>;
+      setGameHighScore(custom.detail);
+    };
+    window.addEventListener('star_shooter_highscore_updated', handleHighUpdate);
+    return () => window.removeEventListener('star_shooter_highscore_updated', handleHighUpdate);
   }, []);
 
   const handleAudioToggle = () => {
@@ -74,6 +91,11 @@ export const HudHeader: React.FC<HudHeaderProps> = ({
           </span>
           <span className="text-neutral-300">ROBOTICS & EMBEDDED IoT // NPTEL ETHICAL HACKING // AI-CV</span>
           <span className="text-amber-400 font-semibold">IIT MADRAS 1ST PLACE & ROBO SOCCER SEMIS</span>
+          {gameHighScore > 0 && (
+            <span className="text-amber-300 font-bold bg-amber-500/15 px-2 py-0.5 rounded border border-amber-500/40 flex items-center gap-1">
+              🏆 HIGH SCORE: {gameHighScore}
+            </span>
+          )}
         </div>
 
         <div className="flex items-center gap-4">

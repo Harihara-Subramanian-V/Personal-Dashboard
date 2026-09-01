@@ -47,8 +47,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   }, []);
 
   return (
-    <section id="overview" className="relative pt-6 pb-12 sm:pt-10 sm:pb-16 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+    <section id="overview" className="relative pt-4 pb-6 sm:pt-6 sm:pb-10 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
         {/* Left Col: Engineering Dossier & Bio */}
         <div className="lg:col-span-7 space-y-6 text-left">
           {/* Multi-Discipline Tag Ribbon */}

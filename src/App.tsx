@@ -11,12 +11,11 @@ import { SlideOverCommsDrawer } from './components/SlideOverCommsDrawer';
 import { ResumeDossierModal } from './components/ResumeDossierModal';
 import { WirelessDeviceScanner } from './components/WirelessDeviceScanner';
 import { CyberStarShooter } from './components/CyberStarShooter';
-import { IntroScreen } from './components/IntroScreen';
 import { CustomCursor } from './components/CustomCursor';
 import { Terminal, Mail } from 'lucide-react';
 
 export function App() {
-  const [showIntro, setShowIntro] = useState<boolean>(true);
+  const [isIntro, setIsIntro] = useState<boolean>(true);
   const [activeLayer, setActiveLayer] = useState<DashboardLayer>('overview');
   const [isResumeOpen, setIsResumeOpen] = useState<boolean>(false);
   const [isRfScannerOpen, setIsRfScannerOpen] = useState<boolean>(false);
@@ -42,16 +41,6 @@ export function App() {
     setActiveLayer('projects');
   };
 
-  // If user hasn't clicked into the dashboard yet, show the minimalist Hero Name Splash Gate
-  if (showIntro) {
-    return (
-      <>
-        <CustomCursor />
-        <IntroScreen onEnter={() => setShowIntro(false)} />
-      </>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-[#070709] text-[#f0f2f5] relative font-rajdhani selection:bg-orange-500 selection:text-black">
       {/* Custom Cyber Reticle Cursor */}
@@ -62,14 +51,16 @@ export function App() {
 
       {/* Main Content Layout Container */}
       <div className="relative z-10 flex flex-col min-h-screen">
-        {/* Top HUD Telemetry & Multi-Layer Navigation */}
-        <HudHeader
-          activeLayer={activeLayer}
-          onSelectLayer={(layer) => setActiveLayer(layer)}
-          onOpenResumeModal={() => setIsResumeOpen(true)}
-          onOpenRfScanner={() => setIsRfScannerOpen(true)}
-          onOpenComms={() => setIsCommsOpen(true)}
-        />
+        {/* Top HUD Telemetry & Multi-Layer Navigation (Hidden during intro) */}
+        {!isIntro && (
+          <HudHeader
+            activeLayer={activeLayer}
+            onSelectLayer={(layer) => setActiveLayer(layer)}
+            onOpenResumeModal={() => setIsResumeOpen(true)}
+            onOpenRfScanner={() => setIsRfScannerOpen(true)}
+            onOpenComms={() => setIsCommsOpen(true)}
+          />
+        )}
 
         {/* Tactical Layer Body Viewports */}
         <main className="flex-1 max-w-7xl mx-auto px-4 py-3 w-full">
@@ -77,6 +68,8 @@ export function App() {
           {activeLayer === 'overview' && (
             <div className="animate-in fade-in duration-200">
               <HeroSection
+                isIntro={isIntro}
+                onEnterDashboard={() => setIsIntro(false)}
                 onNavigateLayer={(layer) => setActiveLayer(layer)}
                 onOpenRfScanner={() => setIsRfScannerOpen(true)}
                 onOpenComms={() => setIsCommsOpen(true)}
@@ -86,7 +79,7 @@ export function App() {
           )}
 
           {/* LAYER 02: MISSIONS & LABS */}
-          {activeLayer === 'projects' && (
+          {activeLayer === 'projects' && !isIntro && (
             <div className="animate-in fade-in duration-200">
               <ProjectsSection
                 selectedProjectId={selectedProjectId}
@@ -95,29 +88,29 @@ export function App() {
             </div>
           )}
 
-          {/* LAYER 03: CAPABILITIES & HARDWARE MATRIX (Graph Only as requested) */}
-          {activeLayer === 'capabilities' && (
+          {/* LAYER 03: CAPABILITIES & HARDWARE MATRIX */}
+          {activeLayer === 'capabilities' && !isIntro && (
             <div className="animate-in fade-in duration-200">
               <SkillDefenseMatrix />
             </div>
           )}
 
           {/* LAYER 04: HONORS & RESEARCH PAPERS */}
-          {activeLayer === 'achievements' && (
+          {activeLayer === 'achievements' && !isIntro && (
             <div className="animate-in fade-in duration-200">
               <AchievementsSection />
             </div>
           )}
 
           {/* LAYER 05: FIELD PHOTO GALLERY */}
-          {activeLayer === 'gallery' && (
+          {activeLayer === 'gallery' && !isIntro && (
             <div className="animate-in fade-in duration-200">
               <PhotoGallerySection />
             </div>
           )}
 
           {/* LAYER 06: ROOT DEFENSE CLI TERMINAL */}
-          {activeLayer === 'terminal' && (
+          {activeLayer === 'terminal' && !isIntro && (
             <div className="animate-in fade-in duration-200 max-w-5xl mx-auto space-y-4">
               <div className="border-b border-orange-500/30 pb-2 flex items-center justify-between font-mono">
                 <div>
@@ -145,7 +138,7 @@ export function App() {
           )}
 
           {/* LAYER 07: ENCRYPTED COMMS & TRANSMISSION */}
-          {activeLayer === 'contact' && (
+          {activeLayer === 'contact' && !isIntro && (
             <div className="animate-in fade-in duration-200 max-w-3xl mx-auto space-y-4 font-mono text-xs">
               <div className="border-b border-orange-500/30 pb-2 flex items-center justify-between">
                 <div>
@@ -183,78 +176,80 @@ export function App() {
           )}
         </main>
 
-        {/* Cyberpunk Sharp Telemetry Footer */}
-        <footer className="mt-8 border-t border-orange-500/30 bg-black py-4 px-4 font-mono text-xs text-neutral-400">
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <div className="w-2 h-2 bg-orange-500 inline-block" />
-              <div>
-                <div className="font-orbitron font-bold text-white text-xs">
-                  HARIHARA SUBRAMANIAN V
-                </div>
-                <div className="text-[10px] text-orange-400">
-                  VIT Vellore (B.Tech IT) & IIT Madras (BS Data Science)
+        {/* Cyberpunk Sharp Telemetry Footer (Hidden during intro) */}
+        {!isIntro && (
+          <footer className="mt-8 border-t border-orange-500/30 bg-black py-4 px-4 font-mono text-xs text-neutral-400 animate-stagger-8">
+            <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-orange-500 inline-block" />
+                <div>
+                  <div className="font-orbitron font-bold text-white text-xs">
+                    HARIHARA SUBRAMANIAN V
+                  </div>
+                  <div className="text-[10px] text-orange-400">
+                    VIT Vellore (B.Tech IT) & IIT Madras (BS Data Science)
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Quick Layer Switcher Pills in Footer */}
-            <div className="flex flex-wrap items-center gap-1 font-mono text-[10px]">
-              <button
-                onClick={() => setActiveLayer('overview')}
-                className={`px-2 py-0.5 border ${activeLayer === 'overview' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
-              >
-                01_OVERVIEW
-              </button>
-              <button
-                onClick={() => setActiveLayer('projects')}
-                className={`px-2 py-0.5 border ${activeLayer === 'projects' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
-              >
-                02_MISSIONS
-              </button>
-              <button
-                onClick={() => setActiveLayer('capabilities')}
-                className={`px-2 py-0.5 border ${activeLayer === 'capabilities' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
-              >
-                03_CAPABILITIES
-              </button>
-              <button
-                onClick={() => setActiveLayer('achievements')}
-                className={`px-2 py-0.5 border ${activeLayer === 'achievements' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
-              >
-                04_HONORS
-              </button>
-              <button
-                onClick={() => setActiveLayer('gallery')}
-                className={`px-2 py-0.5 border ${activeLayer === 'gallery' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
-              >
-                05_GALLERY
-              </button>
-              <button
-                onClick={() => setActiveLayer('terminal')}
-                className={`px-2 py-0.5 border ${activeLayer === 'terminal' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
-              >
-                06_CLI
-              </button>
-            </div>
+              {/* Quick Layer Switcher Pills in Footer */}
+              <div className="flex flex-wrap items-center gap-1 font-mono text-[10px]">
+                <button
+                  onClick={() => setActiveLayer('overview')}
+                  className={`px-2 py-0.5 border ${activeLayer === 'overview' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
+                >
+                  01_OVERVIEW
+                </button>
+                <button
+                  onClick={() => setActiveLayer('projects')}
+                  className={`px-2 py-0.5 border ${activeLayer === 'projects' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
+                >
+                  02_MISSIONS
+                </button>
+                <button
+                  onClick={() => setActiveLayer('capabilities')}
+                  className={`px-2 py-0.5 border ${activeLayer === 'capabilities' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
+                >
+                  03_CAPABILITIES
+                </button>
+                <button
+                  onClick={() => setActiveLayer('achievements')}
+                  className={`px-2 py-0.5 border ${activeLayer === 'achievements' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
+                >
+                  04_HONORS
+                </button>
+                <button
+                  onClick={() => setActiveLayer('gallery')}
+                  className={`px-2 py-0.5 border ${activeLayer === 'gallery' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
+                >
+                  05_GALLERY
+                </button>
+                <button
+                  onClick={() => setActiveLayer('terminal')}
+                  className={`px-2 py-0.5 border ${activeLayer === 'terminal' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
+                >
+                  06_CLI
+                </button>
+              </div>
 
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setShowIntro(true)}
-                className="px-2 py-1 bg-black hover:bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white text-[10px] font-mono"
-                title="Return to Name Splash Gate"
-              >
-                [GATE SCREEN]
-              </button>
-              <button
-                onClick={() => setIsCommsOpen(true)}
-                className="px-2.5 py-1 bg-neutral-900 hover:bg-orange-500 hover:text-black border border-orange-500/40 text-orange-400 text-[11px] font-bold font-orbitron"
-              >
-                COMMS
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setIsIntro(true)}
+                  className="px-2 py-1 bg-black hover:bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white text-[10px] font-mono"
+                  title="Return to Name Splash Gate"
+                >
+                  [GATE SCREEN]
+                </button>
+                <button
+                  onClick={() => setIsCommsOpen(true)}
+                  className="px-2.5 py-1 bg-neutral-900 hover:bg-orange-500 hover:text-black border border-orange-500/40 text-orange-400 text-[11px] font-bold font-orbitron"
+                >
+                  COMMS
+                </button>
+              </div>
             </div>
-          </div>
-        </footer>
+          </footer>
+        )}
       </div>
 
       {/* Persistent Side Comms Link Drawer */}

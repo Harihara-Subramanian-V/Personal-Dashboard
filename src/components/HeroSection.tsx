@@ -11,6 +11,8 @@ interface HeroSectionProps {
   onOpenRfScanner?: () => void;
   onOpenComms?: () => void;
   onOpenResumeModal: () => void;
+  isIntro: boolean;
+  onEnterDashboard: () => void;
 }
 
 const ROTATING_CREDENTIALS = [
@@ -31,6 +33,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onOpenRfScanner,
   onOpenComms,
   onOpenResumeModal,
+  isIntro,
+  onEnterDashboard,
 }) => {
   const [activeIdx, setActiveIdx] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -49,73 +53,94 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   return (
     <section id="overview" className="relative py-2 sm:py-4 overflow-hidden space-y-6">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      {/* 1. CINEMATIC ENTRANCE OVERLAY (Active when isIntro is true) */}
+      {isIntro && (
+        <div
+          onClick={onEnterDashboard}
+          className="fixed inset-0 z-50 bg-[#070709] flex items-center justify-center cursor-pointer select-none p-4 animate-in fade-in duration-300"
+        >
+          <div className="text-center group transition-transform duration-500 ease-out hover:scale-105">
+            {/* Pure 2-line name without any other text/boxes */}
+            <h1 className="font-orbitron font-black text-4xl xs:text-5xl sm:text-7xl md:text-8xl tracking-tight uppercase leading-none">
+              <span className="block text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.25)]">
+                HARIHARA
+              </span>
+              <span className="block text-orange-400 mt-2 group-hover:text-amber-300 transition-colors drop-shadow-[0_0_30px_rgba(255,107,0,0.35)]">
+                SUBRAMANIAN V
+              </span>
+            </h1>
+          </div>
+        </div>
+      )}
+
+      {/* 2. MAIN DASHBOARD CONTENT GRID (Cascades in sequentially after intro is clicked) */}
+      <div className={`max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start transition-opacity duration-500 ${isIntro ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         {/* Left Col: Engineering Dossier & Bio */}
         <div className="lg:col-span-7 space-y-4 text-left">
-          {/* 1. Multi-Discipline Tag Ribbon (Staggered Entrance 1) */}
-          <div className="flex flex-wrap items-center gap-1.5 font-mono text-xs animate-stagger-1">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/15 border border-amber-500/40 text-amber-300 font-bold">
-              <Trophy className="w-3.5 h-3.5 text-amber-400" />
-              <span>IIT MADRAS DUAL BS (DATA SCIENCE)</span>
-            </div>
+          {/* Step 1: Multi-Discipline Tag Ribbon & Clearance */}
+          <div className="space-y-2 animate-stagger-1">
+            <div className="flex flex-wrap items-center gap-1.5 font-mono text-xs">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/15 border border-amber-500/40 text-amber-300 font-bold">
+                <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                <span>IIT MADRAS DUAL BS (DATA SCIENCE)</span>
+              </div>
 
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 font-bold">
-              <span className="w-1.5 h-1.5 bg-emerald-400 inline-block" />
-              <span>NPTEL ETHICAL HACKING</span>
-            </div>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 font-bold">
+                <span className="w-1.5 h-1.5 bg-emerald-400 inline-block" />
+                <span>NPTEL ETHICAL HACKING</span>
+              </div>
 
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-orange-500/15 border border-orange-500/40 text-orange-400 font-bold">
-              <Bot className="w-3.5 h-3.5 text-orange-400" />
-              <span>ROBOTICS & SOCCER SEMIS</span>
-            </div>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-orange-500/15 border border-orange-500/40 text-orange-400 font-bold">
+                <Bot className="w-3.5 h-3.5 text-orange-400" />
+                <span>ROBOTICS & SOCCER SEMIS</span>
+              </div>
 
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-black border border-neutral-800 text-neutral-400 text-[11px]">
-              <Cpu className="w-3 h-3 text-orange-400" />
-              <span>VIT VELLORE IT</span>
-            </div>
-          </div>
-
-          {/* 2. 2-Line Hero Name (Drifts into position smoothly) */}
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2 text-[10px] sm:text-xs font-mono text-orange-400 font-bold tracking-widest uppercase animate-stagger-1">
-              <span className="w-2 h-2 bg-emerald-400 inline-block shrink-0" />
-              <span>OPERATOR CLEARANCE: ROOT / DEFCON 1</span>
-            </div>
-
-            <div className="transition-all duration-700 ease-out">
-              <h1 className="font-orbitron font-black text-3xl xs:text-4xl sm:text-5xl lg:text-6xl tracking-tight uppercase select-none leading-none break-words">
-                <span className="text-white block">HARIHARA</span>
-                <span className="text-orange-400 block mt-1">SUBRAMANIAN V</span>
-              </h1>
-            </div>
-
-            {/* 3. Rotating Subtitle Credential Pill (Staggered Entrance 2) */}
-            <div className="min-h-[2.2rem] flex items-center pt-1 animate-stagger-2">
-              <div className="bg-black px-3 py-1.5 border border-orange-500/40 flex items-center gap-2 font-mono text-[11px] sm:text-xs text-orange-300 max-w-full">
-                <span className="text-emerald-400 font-bold shrink-0">▶</span>
-                <span
-                  className={`transition-all duration-300 font-semibold leading-snug ${
-                    isAnimating ? 'opacity-0 scale-98' : 'opacity-100 scale-100 text-neutral-100'
-                  }`}
-                >
-                  {ROTATING_CREDENTIALS[activeIdx]}
-                </span>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-black border border-neutral-800 text-neutral-400 text-[11px]">
+                <Cpu className="w-3 h-3 text-orange-400" />
+                <span>VIT VELLORE IT</span>
               </div>
             </div>
 
-            {/* 4. Interactive 3D Flip Operator vCard (Staggered Entrance 3) */}
-            <div className="animate-stagger-3">
-              <CyberVCardFlip />
+            <div className="flex items-center gap-2 text-[10px] sm:text-xs font-mono text-orange-400 font-bold tracking-widest uppercase">
+              <span className="w-2 h-2 bg-emerald-400 inline-block shrink-0" />
+              <span>OPERATOR CLEARANCE: ROOT / DEFCON 1</span>
             </div>
           </div>
 
-          {/* 5. Profile Overview Description (Staggered Entrance 4) */}
-          <p className="text-neutral-300 text-xs sm:text-sm font-sans leading-relaxed max-w-2xl border-l-2 border-orange-500/50 pl-3 animate-stagger-4">
+          {/* Step 2: 2-Line Hero Name (In place with smooth drift animation) */}
+          <div className="animate-stagger-2">
+            <h1 className="font-orbitron font-black text-3xl xs:text-4xl sm:text-5xl lg:text-6xl tracking-tight uppercase select-none leading-none break-words">
+              <span className="text-white block">HARIHARA</span>
+              <span className="text-orange-400 block mt-1">SUBRAMANIAN V</span>
+            </h1>
+          </div>
+
+          {/* Step 3: Rotating Subtitle Credential Pill */}
+          <div className="min-h-[2.2rem] flex items-center pt-0.5 animate-stagger-3">
+            <div className="bg-black px-3 py-1.5 border border-orange-500/40 flex items-center gap-2 font-mono text-[11px] sm:text-xs text-orange-300 max-w-full">
+              <span className="text-emerald-400 font-bold shrink-0">▶</span>
+              <span
+                className={`transition-all duration-300 font-semibold leading-snug ${
+                  isAnimating ? 'opacity-0 scale-98' : 'opacity-100 scale-100 text-neutral-100'
+                }`}
+              >
+                {ROTATING_CREDENTIALS[activeIdx]}
+              </span>
+            </div>
+          </div>
+
+          {/* Step 4: Interactive 3D Flip Operator vCard */}
+          <div className="animate-stagger-4">
+            <CyberVCardFlip />
+          </div>
+
+          {/* Step 5: Profile Overview Description */}
+          <p className="text-neutral-300 text-xs sm:text-sm font-sans leading-relaxed max-w-2xl border-l-2 border-orange-500/50 pl-3 animate-stagger-5">
             {PROFILE_INFO.bioSummary}
           </p>
 
-          {/* 6. Tactical Stat Pills (Staggered Entrance 5) */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 animate-stagger-5">
+          {/* Step 6: Tactical Stat Counter Pills */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 animate-stagger-6">
             <div className="bg-black p-2 border border-orange-500/30 text-center font-mono">
               <div className="text-[9px] text-neutral-400 uppercase">HARDWARE NODES</div>
               <div className="text-sm sm:text-base font-orbitron font-bold text-orange-400">ESP32 / AVR</div>
@@ -134,8 +159,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
           </div>
 
-          {/* 7. Action CTAs (Staggered Entrance 6) */}
-          <div className="flex flex-col xs:flex-row flex-wrap items-stretch xs:items-center gap-2 pt-1 animate-stagger-6">
+          {/* Step 7: Action CTAs */}
+          <div className="flex flex-col xs:flex-row flex-wrap items-stretch xs:items-center gap-2 pt-1 animate-stagger-7">
             <button
               onClick={() => onNavigateLayer('projects')}
               className="cyber-btn cyber-btn-solid text-xs py-2.5 px-5 font-bold justify-center"
@@ -165,8 +190,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </button>
           </div>
 
-          {/* 8. Channels (Staggered Entrance 7) */}
-          <div className="flex items-center gap-4 pt-1 text-neutral-400 font-mono text-xs animate-stagger-7">
+          {/* Step 8: Channels */}
+          <div className="flex items-center gap-4 pt-1 text-neutral-400 font-mono text-xs animate-stagger-8">
             <span className="text-orange-400 font-bold">CHANNELS:</span>
             <a
               href={PROFILE_INFO.github}
@@ -193,7 +218,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </div>
 
-        {/* Right Col: Tactical Layer Switcher Deck (Staggered Entrance 6) */}
+        {/* Right Col: Tactical Layer Switcher Deck (Step 6/7) */}
         <div className="lg:col-span-5 space-y-3 font-mono text-xs animate-stagger-6">
           <div className="cyber-card p-4 border border-orange-500/40 space-y-3">
             <div className="flex items-center justify-between border-b border-orange-500/30 pb-2">
@@ -342,7 +367,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       </div>
 
       {/* On-Demand Capabilities Radar Graph (Renders when user clicks button on Home/Overview) */}
-      {showHomeGraph && (
+      {showHomeGraph && !isIntro && (
         <div className="max-w-7xl mx-auto pt-2 animate-in fade-in duration-300">
           <div className="flex items-center justify-between bg-black px-4 py-2 border border-orange-500/50 mb-2 font-mono text-xs">
             <span className="text-orange-400 font-bold">[OVERVIEW PLOT // SYSTEM CAPABILITIES & HARDWARE MATRIX]</span>

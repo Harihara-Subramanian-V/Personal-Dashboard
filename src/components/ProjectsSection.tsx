@@ -79,11 +79,12 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
           </div>
         </div>
 
-        {/* Project Cards Grid (Sharp Brutalist) */}
+        {/* Project Cards Grid (Sharp Brutalist with 1.0s gap between consecutive tiles) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredProjects.map((project) => (
+          {filteredProjects.map((project, idx) => (
             <div
               key={project.id}
+              style={{ animation: `slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) ${idx * 1.0 + 0.6}s both` }}
               className="cyber-card p-4 flex flex-col justify-between group hover:border-orange-500/80 transition-all space-y-3"
             >
               <div className="space-y-2">

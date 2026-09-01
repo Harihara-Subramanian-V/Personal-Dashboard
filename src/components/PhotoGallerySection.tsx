@@ -99,11 +99,12 @@ export const PhotoGallerySection: React.FC = () => {
           </div>
         </div>
 
-        {/* Gallery Grid */}
+        {/* Gallery Grid (1.0s gap between consecutive frames) */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {gallery.map((item, idx) => (
             <div
               key={item.id}
+              style={{ animation: `slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) ${idx * 1.0 + 0.6}s both` }}
               className="cyber-card p-4 flex flex-col justify-between border border-neutral-800 hover:border-orange-500/80 transition-all space-y-3"
             >
               {/* Photo Frame / Image Display */}

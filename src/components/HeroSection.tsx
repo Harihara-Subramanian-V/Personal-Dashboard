@@ -40,7 +40,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const [isAnimating, setIsAnimating] = useState(false);
   const [showHomeGraph, setShowHomeGraph] = useState(false);
 
-  // Transition physics state: 'intro' | 'gliding' | 'settled'
   const [animStage, setAnimStage] = useState<'intro' | 'gliding' | 'settled'>(isIntro ? 'intro' : 'settled');
   const [glideStyle, setGlideStyle] = useState<React.CSSProperties>({});
   
@@ -78,7 +77,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       const deltaY = targetRect.top - startRect.top;
       const scale = targetRect.width / startRect.width;
 
-      // Start the smooth cinematic motion graphics drift
       setGlideStyle({
         transform: `translate3d(${deltaX}px, ${deltaY}px, 0) scale(${scale})`,
         transformOrigin: 'top left',
@@ -87,12 +85,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       setAnimStage('gliding');
 
-      // Inform parent after small delay so UI elements begin staggered flow
       setTimeout(() => {
         onEnterDashboard();
       }, 400);
 
-      // Complete transition into normal layout
       setTimeout(() => {
         setAnimStage('settled');
         setGlideStyle({});
@@ -105,7 +101,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   return (
     <section id="overview" className="relative py-2 sm:py-4 overflow-hidden space-y-6">
-      {/* 1. CINEMATIC GLIDING NAME (When in intro or gliding stage) */}
+      {/* 1. CINEMATIC GLIDING NAME */}
       {animStage !== 'settled' && (
         <div
           onClick={handleStartGlide}
@@ -130,12 +126,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         </div>
       )}
 
-      {/* 2. MAIN DASHBOARD CONTENT GRID */}
+      {/* 2. MAIN DASHBOARD CONTENT GRID (Cascades in with 1s gaps between consecutive sections) */}
       <div className={`max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start transition-opacity duration-700 ${animStage === 'intro' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         {/* Left Col: Engineering Dossier & Bio */}
         <div className="lg:col-span-7 space-y-4 text-left">
-          {/* Step 1: Multi-Discipline Tag Ribbon & Clearance (Flows in 1st) */}
-          <div className="space-y-2 animate-flow-1">
+          {/* Step 1: Tag Ribbon & Clearance (0.5s delay) */}
+          <div style={{ animation: 'slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both' }} className="space-y-2">
             <div className="flex flex-wrap items-center gap-1.5 font-mono text-xs">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/15 border border-amber-500/40 text-amber-300 font-bold">
                 <Trophy className="w-3.5 h-3.5 text-amber-400" />
@@ -174,8 +170,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             )}
           </div>
 
-          {/* Step 3: Rotating Subtitle Credential Pill (Flows in 2nd) */}
-          <div className="min-h-[2.2rem] flex items-center pt-0.5 animate-flow-2">
+          {/* Step 3: Rotating Subtitle Credential Pill (1.5s delay — 1.0s gap) */}
+          <div style={{ animation: 'slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1.5s both' }} className="min-h-[2.2rem] flex items-center pt-0.5">
             <div className="bg-black px-3 py-1.5 border border-orange-500/40 flex items-center gap-2 font-mono text-[11px] sm:text-xs text-orange-300 max-w-full">
               <span className="text-emerald-400 font-bold shrink-0">▶</span>
               <span
@@ -188,18 +184,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
           </div>
 
-          {/* Step 4: Interactive 3D Flip Operator vCard (Flows in 3rd) */}
-          <div className="animate-flow-3">
+          {/* Step 4: Interactive 3D Flip Operator vCard (2.5s delay — 1.0s gap) */}
+          <div style={{ animation: 'slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 2.5s both' }}>
             <CyberVCardFlip />
           </div>
 
-          {/* Step 5: Profile Overview Description (Flows in 4th) */}
-          <p className="text-neutral-300 text-xs sm:text-sm font-sans leading-relaxed max-w-2xl border-l-2 border-orange-500/50 pl-3 animate-flow-4">
+          {/* Step 5: Profile Overview Description (3.5s delay — 1.0s gap) */}
+          <p style={{ animation: 'slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 3.5s both' }} className="text-neutral-300 text-xs sm:text-sm font-sans leading-relaxed max-w-2xl border-l-2 border-orange-500/50 pl-3">
             {PROFILE_INFO.bioSummary}
           </p>
 
-          {/* Step 6: Tactical Stat Counter Pills (Flows in 5th) */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 animate-flow-5">
+          {/* Step 6: Tactical Stat Counter Pills (4.5s delay — 1.0s gap) */}
+          <div style={{ animation: 'slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 4.5s both' }} className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
             <div className="bg-black p-2 border border-orange-500/30 text-center font-mono">
               <div className="text-[9px] text-neutral-400 uppercase">HARDWARE NODES</div>
               <div className="text-sm sm:text-base font-orbitron font-bold text-orange-400">ESP32 / AVR</div>
@@ -218,8 +214,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
           </div>
 
-          {/* Step 7: Action CTAs (Flows in 6th) */}
-          <div className="flex flex-col xs:flex-row flex-wrap items-stretch xs:items-center gap-2 pt-1 animate-flow-6">
+          {/* Step 7: Action CTAs (5.5s delay — 1.0s gap) */}
+          <div style={{ animation: 'slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 5.5s both' }} className="flex flex-col xs:flex-row flex-wrap items-stretch xs:items-center gap-2 pt-1">
             <button
               onClick={() => onNavigateLayer('projects')}
               className="cyber-btn cyber-btn-solid text-xs py-2.5 px-5 font-bold justify-center"
@@ -249,8 +245,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </button>
           </div>
 
-          {/* Step 8: Channels (Flows in 7th) */}
-          <div className="flex items-center gap-4 pt-1 text-neutral-400 font-mono text-xs animate-flow-7">
+          {/* Step 8: Channels (6.5s delay — 1.0s gap) */}
+          <div style={{ animation: 'slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 6.5s both' }} className="flex items-center gap-4 pt-1 text-neutral-400 font-mono text-xs">
             <span className="text-orange-400 font-bold">CHANNELS:</span>
             <a
               href={PROFILE_INFO.github}
@@ -277,10 +273,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </div>
 
-        {/* Right Col: Tactical Layer Switcher Deck (Flows in 6th) */}
-        <div className="lg:col-span-5 space-y-3 font-mono text-xs animate-flow-6">
+        {/* Right Col: Tactical Layer Switcher Deck (Each tile loads with 1s gap) */}
+        <div className="lg:col-span-5 space-y-3 font-mono text-xs">
           <div className="cyber-card p-4 border border-orange-500/40 space-y-3">
-            <div className="flex items-center justify-between border-b border-orange-500/30 pb-2">
+            <div style={{ animation: 'slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both' }} className="flex items-center justify-between border-b border-orange-500/30 pb-2">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-emerald-400 inline-block" />
                 <span className="font-orbitron font-bold text-white text-xs">
@@ -291,7 +287,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
 
             <div className="grid grid-cols-1 gap-2">
+              {/* Tile 1: 1.0s delay */}
               <button
+                style={{ animation: 'slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1.0s both' }}
                 onClick={() => onNavigateLayer('projects')}
                 className="p-2.5 bg-black hover:bg-neutral-900 border border-neutral-800 hover:border-orange-400 text-left transition-all flex items-center justify-between group"
               >
@@ -309,7 +307,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <ArrowRight className="w-3.5 h-3.5 text-neutral-500 group-hover:text-orange-400" />
               </button>
 
+              {/* Tile 2: 2.0s delay (1s gap) */}
               <button
+                style={{ animation: 'slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 2.0s both' }}
                 onClick={() => onNavigateLayer('capabilities')}
                 className="p-2.5 bg-black hover:bg-neutral-900 border border-neutral-800 hover:border-orange-400 text-left transition-all flex items-center justify-between group"
               >
@@ -327,7 +327,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <ArrowRight className="w-3.5 h-3.5 text-neutral-500 group-hover:text-orange-400" />
               </button>
 
+              {/* Tile 3: 3.0s delay (1s gap) */}
               <button
+                style={{ animation: 'slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 3.0s both' }}
                 onClick={() => onNavigateLayer('achievements')}
                 className="p-2.5 bg-black hover:bg-neutral-900 border border-neutral-800 hover:border-orange-400 text-left transition-all flex items-center justify-between group"
               >
@@ -345,7 +347,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <ArrowRight className="w-3.5 h-3.5 text-neutral-500 group-hover:text-orange-400" />
               </button>
 
+              {/* Tile 4: 4.0s delay (1s gap) */}
               <button
+                style={{ animation: 'slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 4.0s both' }}
                 onClick={() => onNavigateLayer('gallery')}
                 className="p-2.5 bg-black hover:bg-neutral-900 border border-neutral-800 hover:border-orange-400 text-left transition-all flex items-center justify-between group"
               >
@@ -363,7 +367,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <ArrowRight className="w-3.5 h-3.5 text-neutral-500 group-hover:text-orange-400" />
               </button>
 
+              {/* Tile 5: 5.0s delay (1s gap) */}
               <button
+                style={{ animation: 'slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 5.0s both' }}
                 onClick={() => onNavigateLayer('terminal')}
                 className="p-2.5 bg-black hover:bg-neutral-900 border border-neutral-800 hover:border-orange-400 text-left transition-all flex items-center justify-between group"
               >
@@ -381,7 +387,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <ArrowRight className="w-3.5 h-3.5 text-neutral-500 group-hover:text-orange-400" />
               </button>
 
+              {/* Tile 6: 6.0s delay (1s gap) */}
               <button
+                style={{ animation: 'slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 6.0s both' }}
                 onClick={() => {
                   if (onOpenComms) onOpenComms();
                   else onNavigateLayer('contact');
@@ -403,8 +411,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </button>
             </div>
 
-            {/* Quick Actions Footer inside Deck */}
-            <div className="pt-2 border-t border-neutral-800 flex items-center justify-between">
+            {/* Quick Actions Footer inside Deck (7.0s delay) */}
+            <div style={{ animation: 'slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 7.0s both' }} className="pt-2 border-t border-neutral-800 flex items-center justify-between">
               <button
                 onClick={onOpenResumeModal}
                 className="text-[11px] text-emerald-400 font-bold hover:underline flex items-center gap-1"
@@ -425,7 +433,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         </div>
       </div>
 
-      {/* On-Demand Capabilities Radar Graph (Renders when user clicks button on Home/Overview) */}
+      {/* On-Demand Capabilities Radar Graph */}
       {showHomeGraph && animStage === 'settled' && (
         <div className="max-w-7xl mx-auto pt-2 animate-in fade-in duration-500">
           <div className="flex items-center justify-between bg-black px-4 py-2 border border-orange-500/50 mb-2 font-mono text-xs">

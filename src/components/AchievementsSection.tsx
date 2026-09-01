@@ -16,7 +16,7 @@ export const AchievementsSection: React.FC = () => {
     <section id="achievements" className="py-4 sm:py-6 relative">
       <div className="max-w-7xl mx-auto px-4 space-y-6">
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-orange-500/30 pb-3">
+        <div style={{ animation: 'slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both' }} className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-orange-500/30 pb-3">
           <div>
             <div className="text-xs font-mono text-emerald-400 font-bold tracking-widest uppercase flex items-center gap-2">
               <Award className="w-4 h-4 text-emerald-400" /> [SECTION 04] // OPERATIONS & ACHIEVEMENTS LOG
@@ -26,7 +26,7 @@ export const AchievementsSection: React.FC = () => {
             </h2>
           </div>
 
-          {/* Filter Tabs (Sharp Brutalist) */}
+          {/* Filter Tabs */}
           <div className="flex overflow-x-auto no-scrollbar sm:flex-wrap gap-1.5 font-mono text-xs pb-1 sm:pb-0">
             {[
               { id: 'ALL', label: 'ALL OPERATIONS' },
@@ -49,7 +49,7 @@ export const AchievementsSection: React.FC = () => {
           </div>
         </div>
 
-        {/* 1. Research Papers Dedicated Grid */}
+        {/* 1. Research Papers Dedicated Grid (1.0s gap between consecutive tiles) */}
         {(activeTab === 'ALL' || activeTab === 'RESEARCH') && (
           <div className="space-y-3">
             <div className="flex items-center gap-2 font-mono text-xs text-emerald-400 font-bold uppercase tracking-wider">
@@ -61,6 +61,7 @@ export const AchievementsSection: React.FC = () => {
               {RESEARCH_PAPERS.map((paper, idx) => (
                 <div
                   key={paper.id}
+                  style={{ animation: `slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) ${idx * 1.0 + 0.6}s both` }}
                   className="cyber-card p-4 space-y-2 border-l-4 border-l-emerald-500 border-t border-r border-b border-neutral-800 hover:border-emerald-500/80 transition-all"
                 >
                   <div className="flex items-center justify-between font-mono text-[11px]">
@@ -102,7 +103,7 @@ export const AchievementsSection: React.FC = () => {
           </div>
         )}
 
-        {/* 2. Hackathons, Club Milestones & Honors */}
+        {/* 2. Hackathons, Club Milestones & Honors (1.0s gap between consecutive tiles) */}
         {(activeTab === 'ALL' || activeTab !== 'RESEARCH') && (
           <div className="space-y-3">
             <div className="flex items-center gap-2 font-mono text-xs text-orange-400 font-bold uppercase tracking-wider">
@@ -111,9 +112,10 @@ export const AchievementsSection: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredAchievements.map((ach) => (
+              {filteredAchievements.map((ach, idx) => (
                 <div
                   key={ach.id}
+                  style={{ animation: `slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) ${idx * 1.0 + 0.6}s both` }}
                   className="cyber-card p-4 flex flex-col justify-between space-y-3 hover:border-orange-500/80 transition-all"
                 >
                   <div className="space-y-2">

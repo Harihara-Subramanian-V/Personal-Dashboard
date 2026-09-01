@@ -51,8 +51,8 @@ export const CapabilitiesRadarGraph: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-        {/* Radar Chart SVG Visualizer */}
-        <div className="lg:col-span-7 flex flex-col items-center justify-center p-2 bg-neutral-950 border border-neutral-800">
+        {/* Radar Chart SVG Visualizer (0.5s delay) */}
+        <div style={{ animation: 'slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both' }} className="lg:col-span-7 flex flex-col items-center justify-center p-2 bg-neutral-950 border border-neutral-800">
           <svg viewBox="0 0 320 300" className="w-full max-w-[340px] h-auto overflow-visible select-none">
             {/* Concentric Grid Rings */}
             {[0.2, 0.4, 0.6, 0.8, 1.0].map((level, idx) => {
@@ -123,7 +123,7 @@ export const CapabilitiesRadarGraph: React.FC = () => {
           </svg>
         </div>
 
-        {/* Hardware Telemetry & Allocation Registers */}
+        {/* Hardware Telemetry & Allocation Registers (1.0s gap between consecutive tiles) */}
         <div className="lg:col-span-5 space-y-2.5 font-mono text-xs">
           <div className="text-[10px] text-orange-400 font-bold uppercase flex items-center gap-1">
             <Cpu className="w-3 h-3 text-orange-400" />
@@ -131,8 +131,12 @@ export const CapabilitiesRadarGraph: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            {HARDWARE_INVENTORY.map((hw) => (
-              <div key={hw.name} className="bg-neutral-950 p-2.5 border border-neutral-800 space-y-1">
+            {HARDWARE_INVENTORY.map((hw, idx) => (
+              <div
+                key={hw.name}
+                style={{ animation: `slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) ${idx * 1.0 + 1.2}s both` }}
+                className="bg-neutral-950 p-2.5 border border-neutral-800 space-y-1"
+              >
                 <div className="flex items-center justify-between text-xs font-bold">
                   <span className="text-white">{hw.name}</span>
                   <span className="text-orange-400 text-[10px]">{hw.tag}</span>

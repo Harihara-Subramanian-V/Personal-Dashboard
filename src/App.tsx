@@ -178,7 +178,7 @@ export function App() {
 
         {/* Cyberpunk Sharp Telemetry Footer (Hidden during intro) */}
         {!isIntro && (
-          <footer className="mt-8 border-t border-orange-500/30 bg-black py-4 px-4 font-mono text-xs text-neutral-400 animate-stagger-8">
+          <footer className="mt-8 border-t border-orange-500/30 bg-black py-4 px-4 font-mono text-xs text-neutral-400 animate-flow-8">
             <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-orange-500 inline-block" />

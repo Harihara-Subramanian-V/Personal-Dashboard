@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Trophy, Bot, Cpu, Radio, Layers, ShieldCheck, Terminal, Award, Mail, BarChart2, Camera, ChevronDown, ChevronUp } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './CyberIcons';
 import { CyberVCardFlip } from './CyberVCardFlip';
@@ -40,6 +40,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const [isAnimating, setIsAnimating] = useState(false);
   const [showHomeGraph, setShowHomeGraph] = useState(false);
 
+  // Transition physics state: 'intro' | 'gliding' | 'settled'
+  const [animStage, setAnimStage] = useState<'intro' | 'gliding' | 'settled'>(isIntro ? 'intro' : 'settled');
+  const [glideStyle, setGlideStyle] = useState<React.CSSProperties>({});
+  
+  const targetSlotRef = useRef<HTMLDivElement | null>(null);
+  const movingNameRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!isIntro && animStage === 'intro') {
+      setAnimStage('settled');
+    }
+  }, [isIntro, animStage]);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setIsAnimating(true);
@@ -51,21 +64,65 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     return () => clearInterval(timer);
   }, []);
 
+  const handleStartGlide = () => {
+    if (animStage !== 'intro') return;
+
+    const movingEl = movingNameRef.current;
+    const targetEl = targetSlotRef.current;
+
+    if (movingEl && targetEl) {
+      const startRect = movingEl.getBoundingClientRect();
+      const targetRect = targetEl.getBoundingClientRect();
+
+      const deltaX = targetRect.left - startRect.left;
+      const deltaY = targetRect.top - startRect.top;
+      const scale = targetRect.width / startRect.width;
+
+      // Start the smooth cinematic motion graphics drift
+      setGlideStyle({
+        transform: `translate3d(${deltaX}px, ${deltaY}px, 0) scale(${scale})`,
+        transformOrigin: 'top left',
+        transition: 'transform 1.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.6s ease-out',
+      });
+
+      setAnimStage('gliding');
+
+      // Inform parent after small delay so UI elements begin staggered flow
+      setTimeout(() => {
+        onEnterDashboard();
+      }, 400);
+
+      // Complete transition into normal layout
+      setTimeout(() => {
+        setAnimStage('settled');
+        setGlideStyle({});
+      }, 1650);
+    } else {
+      onEnterDashboard();
+      setAnimStage('settled');
+    }
+  };
+
   return (
     <section id="overview" className="relative py-2 sm:py-4 overflow-hidden space-y-6">
-      {/* 1. CINEMATIC ENTRANCE OVERLAY (Active when isIntro is true) */}
-      {isIntro && (
+      {/* 1. CINEMATIC GLIDING NAME (When in intro or gliding stage) */}
+      {animStage !== 'settled' && (
         <div
-          onClick={onEnterDashboard}
-          className="fixed inset-0 z-50 bg-[#070709] flex items-center justify-center cursor-pointer select-none p-4 animate-in fade-in duration-300"
+          onClick={handleStartGlide}
+          className={`fixed inset-0 z-50 flex items-center justify-center cursor-pointer select-none transition-colors duration-700 ${
+            animStage === 'intro' ? 'bg-[#070709]' : 'bg-transparent pointer-events-none'
+          }`}
         >
-          <div className="text-center group transition-transform duration-500 ease-out hover:scale-105">
-            {/* Pure 2-line name without any other text/boxes */}
-            <h1 className="font-orbitron font-black text-4xl xs:text-5xl sm:text-7xl md:text-8xl tracking-tight uppercase leading-none">
-              <span className="block text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.25)]">
+          <div
+            ref={movingNameRef}
+            style={glideStyle}
+            className="text-center group transition-transform duration-500 ease-out"
+          >
+            <h1 className="font-orbitron font-black text-4xl xs:text-5xl sm:text-7xl md:text-8xl tracking-tight uppercase leading-none text-center">
+              <span className="block text-white drop-shadow-[0_0_35px_rgba(255,255,255,0.3)]">
                 HARIHARA
               </span>
-              <span className="block text-orange-400 mt-2 group-hover:text-amber-300 transition-colors drop-shadow-[0_0_30px_rgba(255,107,0,0.35)]">
+              <span className="block text-orange-400 mt-2 group-hover:text-amber-300 transition-colors drop-shadow-[0_0_35px_rgba(255,107,0,0.4)]">
                 SUBRAMANIAN V
               </span>
             </h1>
@@ -73,12 +130,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         </div>
       )}
 
-      {/* 2. MAIN DASHBOARD CONTENT GRID (Cascades in sequentially after intro is clicked) */}
-      <div className={`max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start transition-opacity duration-500 ${isIntro ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+      {/* 2. MAIN DASHBOARD CONTENT GRID */}
+      <div className={`max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start transition-opacity duration-700 ${animStage === 'intro' ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         {/* Left Col: Engineering Dossier & Bio */}
         <div className="lg:col-span-7 space-y-4 text-left">
-          {/* Step 1: Multi-Discipline Tag Ribbon & Clearance */}
-          <div className="space-y-2 animate-stagger-1">
+          {/* Step 1: Multi-Discipline Tag Ribbon & Clearance (Flows in 1st) */}
+          <div className="space-y-2 animate-flow-1">
             <div className="flex flex-wrap items-center gap-1.5 font-mono text-xs">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/15 border border-amber-500/40 text-amber-300 font-bold">
                 <Trophy className="w-3.5 h-3.5 text-amber-400" />
@@ -107,16 +164,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
           </div>
 
-          {/* Step 2: 2-Line Hero Name (In place with smooth drift animation) */}
-          <div className="animate-stagger-2">
-            <h1 className="font-orbitron font-black text-3xl xs:text-4xl sm:text-5xl lg:text-6xl tracking-tight uppercase select-none leading-none break-words">
-              <span className="text-white block">HARIHARA</span>
-              <span className="text-orange-400 block mt-1">SUBRAMANIAN V</span>
-            </h1>
+          {/* Step 2: Target Placeholder for Hero Name */}
+          <div ref={targetSlotRef} className="min-h-[72px] sm:min-h-[96px]">
+            {animStage === 'settled' && (
+              <h1 className="font-orbitron font-black text-3xl xs:text-4xl sm:text-5xl lg:text-6xl tracking-tight uppercase select-none leading-none break-words">
+                <span className="text-white block">HARIHARA</span>
+                <span className="text-orange-400 block mt-1">SUBRAMANIAN V</span>
+              </h1>
+            )}
           </div>
 
-          {/* Step 3: Rotating Subtitle Credential Pill */}
-          <div className="min-h-[2.2rem] flex items-center pt-0.5 animate-stagger-3">
+          {/* Step 3: Rotating Subtitle Credential Pill (Flows in 2nd) */}
+          <div className="min-h-[2.2rem] flex items-center pt-0.5 animate-flow-2">
             <div className="bg-black px-3 py-1.5 border border-orange-500/40 flex items-center gap-2 font-mono text-[11px] sm:text-xs text-orange-300 max-w-full">
               <span className="text-emerald-400 font-bold shrink-0">▶</span>
               <span
@@ -129,18 +188,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
           </div>
 
-          {/* Step 4: Interactive 3D Flip Operator vCard */}
-          <div className="animate-stagger-4">
+          {/* Step 4: Interactive 3D Flip Operator vCard (Flows in 3rd) */}
+          <div className="animate-flow-3">
             <CyberVCardFlip />
           </div>
 
-          {/* Step 5: Profile Overview Description */}
-          <p className="text-neutral-300 text-xs sm:text-sm font-sans leading-relaxed max-w-2xl border-l-2 border-orange-500/50 pl-3 animate-stagger-5">
+          {/* Step 5: Profile Overview Description (Flows in 4th) */}
+          <p className="text-neutral-300 text-xs sm:text-sm font-sans leading-relaxed max-w-2xl border-l-2 border-orange-500/50 pl-3 animate-flow-4">
             {PROFILE_INFO.bioSummary}
           </p>
 
-          {/* Step 6: Tactical Stat Counter Pills */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 animate-stagger-6">
+          {/* Step 6: Tactical Stat Counter Pills (Flows in 5th) */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 animate-flow-5">
             <div className="bg-black p-2 border border-orange-500/30 text-center font-mono">
               <div className="text-[9px] text-neutral-400 uppercase">HARDWARE NODES</div>
               <div className="text-sm sm:text-base font-orbitron font-bold text-orange-400">ESP32 / AVR</div>
@@ -159,8 +218,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
           </div>
 
-          {/* Step 7: Action CTAs */}
-          <div className="flex flex-col xs:flex-row flex-wrap items-stretch xs:items-center gap-2 pt-1 animate-stagger-7">
+          {/* Step 7: Action CTAs (Flows in 6th) */}
+          <div className="flex flex-col xs:flex-row flex-wrap items-stretch xs:items-center gap-2 pt-1 animate-flow-6">
             <button
               onClick={() => onNavigateLayer('projects')}
               className="cyber-btn cyber-btn-solid text-xs py-2.5 px-5 font-bold justify-center"
@@ -190,8 +249,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </button>
           </div>
 
-          {/* Step 8: Channels */}
-          <div className="flex items-center gap-4 pt-1 text-neutral-400 font-mono text-xs animate-stagger-8">
+          {/* Step 8: Channels (Flows in 7th) */}
+          <div className="flex items-center gap-4 pt-1 text-neutral-400 font-mono text-xs animate-flow-7">
             <span className="text-orange-400 font-bold">CHANNELS:</span>
             <a
               href={PROFILE_INFO.github}
@@ -218,8 +277,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </div>
 
-        {/* Right Col: Tactical Layer Switcher Deck (Step 6/7) */}
-        <div className="lg:col-span-5 space-y-3 font-mono text-xs animate-stagger-6">
+        {/* Right Col: Tactical Layer Switcher Deck (Flows in 6th) */}
+        <div className="lg:col-span-5 space-y-3 font-mono text-xs animate-flow-6">
           <div className="cyber-card p-4 border border-orange-500/40 space-y-3">
             <div className="flex items-center justify-between border-b border-orange-500/30 pb-2">
               <div className="flex items-center gap-2">
@@ -367,8 +426,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       </div>
 
       {/* On-Demand Capabilities Radar Graph (Renders when user clicks button on Home/Overview) */}
-      {showHomeGraph && !isIntro && (
-        <div className="max-w-7xl mx-auto pt-2 animate-in fade-in duration-300">
+      {showHomeGraph && animStage === 'settled' && (
+        <div className="max-w-7xl mx-auto pt-2 animate-in fade-in duration-500">
           <div className="flex items-center justify-between bg-black px-4 py-2 border border-orange-500/50 mb-2 font-mono text-xs">
             <span className="text-orange-400 font-bold">[OVERVIEW PLOT // SYSTEM CAPABILITIES & HARDWARE MATRIX]</span>
             <button

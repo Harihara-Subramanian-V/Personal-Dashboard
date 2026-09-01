@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Trophy, Bot, Cpu, Radio } from 'lucide-react';
+import { ArrowRight, Trophy, Bot, Cpu, Radio, Layers, ShieldCheck, Terminal, Award, Mail } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './CyberIcons';
-import { ThreeWorldGeoMap } from './ThreeWorldGeoMap';
-import { AudioWaveVisualizer } from './AudioWaveVisualizer';
 import { CyberVCardFlip } from './CyberVCardFlip';
 import { PROFILE_INFO } from '../data/profileData';
-import { cyberAudio } from '../utils/audio';
+import type { DashboardLayer } from './HudHeader';
 
 interface HeroSectionProps {
-  onOpenTerminal: () => void;
-  onExploreProjects: () => void;
+  onNavigateLayer: (layer: DashboardLayer) => void;
   onOpenRfScanner?: () => void;
+  onOpenComms?: () => void;
+  onOpenResumeModal: () => void;
 }
 
 const ROTATING_CREDENTIALS = [
@@ -27,14 +26,14 @@ const ROTATING_CREDENTIALS = [
 ];
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
-  onOpenTerminal,
-  onExploreProjects,
+  onNavigateLayer,
   onOpenRfScanner,
+  onOpenComms,
+  onOpenResumeModal,
 }) => {
   const [activeIdx, setActiveIdx] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // Smooth, silky subtitle transition without jittery letter-by-letter backspacing
   useEffect(() => {
     const timer = setInterval(() => {
       setIsAnimating(true);
@@ -47,63 +46,54 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   }, []);
 
   return (
-    <section id="overview" className="relative pt-4 pb-6 sm:pt-6 sm:pb-10 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+    <section id="overview" className="relative py-4 sm:py-6 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Col: Engineering Dossier & Bio */}
-        <div className="lg:col-span-7 space-y-6 text-left">
+        <div className="lg:col-span-7 space-y-4 text-left">
           {/* Multi-Discipline Tag Ribbon */}
-          <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/15 border border-amber-500/40 rounded-full text-amber-300 font-bold shadow-sm shadow-amber-500/20">
+          <div className="flex flex-wrap items-center gap-1.5 font-mono text-xs">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/15 border border-amber-500/40 text-amber-300 font-bold">
               <Trophy className="w-3.5 h-3.5 text-amber-400" />
               <span>IIT MADRAS DUAL BS (DATA SCIENCE)</span>
             </div>
 
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500/15 border border-emerald-500/40 rounded-full text-emerald-300 font-bold">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping inline-block" />
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 font-bold">
+              <span className="w-1.5 h-1.5 bg-emerald-400 inline-block" />
               <span>NPTEL ETHICAL HACKING</span>
             </div>
 
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-orange-500/15 border border-orange-500/40 rounded-full text-orange-400 font-bold">
+            <div className="inline-flex items-center gap-1.5 px-2 py-1 bg-orange-500/15 border border-orange-500/40 text-orange-400 font-bold">
               <Bot className="w-3.5 h-3.5 text-orange-400" />
-              <span>ROBOTICS & SOCCER KINEMATICS</span>
+              <span>ROBOTICS & SOCCER SEMIS</span>
             </div>
 
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-black/60 border border-neutral-800 rounded-full text-neutral-400 text-[11px]">
+            <div className="inline-flex items-center gap-1.5 px-2 py-1 bg-black border border-neutral-800 text-neutral-400 text-[11px]">
               <Cpu className="w-3 h-3 text-orange-400" />
               <span>VIT VELLORE IT</span>
             </div>
           </div>
 
-          {/* Clean, Stable, Rock-Solid Hero Title with Silky Sheen Sweep (Zero Jitter) */}
-          <div className="space-y-3">
+          {/* Sharp Hero Title */}
+          <div className="space-y-2">
             <div className="flex items-center gap-2 text-[10px] sm:text-xs font-mono text-orange-400 font-bold tracking-widest uppercase">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping inline-block shrink-0" />
+              <span className="w-2 h-2 bg-emerald-400 inline-block shrink-0" />
               <span>OPERATOR CLEARANCE: ROOT / DEFCON 1</span>
             </div>
 
-            <div
-              className="light-sheen-sweep inline-block rounded-lg max-w-full"
-              onMouseEnter={() => cyberAudio.playHover()}
-            >
-              <h1 className="font-orbitron font-black text-2xl xs:text-3xl sm:text-5xl lg:text-6xl tracking-tight uppercase select-none transition-all hero-glow-title leading-tight break-words">
-                <span className="text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.25)]">
-                  HARIHARA{' '}
-                </span>
-                <span className="bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500 bg-clip-text text-transparent">
-                  SUBRAMANIAN V
-                </span>
+            <div>
+              <h1 className="font-orbitron font-black text-2xl xs:text-3xl sm:text-4xl lg:text-5xl tracking-tight uppercase select-none leading-tight break-words">
+                <span className="text-white">HARIHARA </span>
+                <span className="text-orange-400">SUBRAMANIAN V</span>
               </h1>
             </div>
 
-            {/* Silky-Smooth Fade & Slide Subtitle Badge (No layout jumping) */}
-            <div className="min-h-[2.5rem] flex items-center">
-              <div className="bg-black/75 px-3 py-1.5 sm:px-3.5 rounded-md border border-orange-500/30 flex items-center gap-2 font-mono text-[11px] sm:text-sm text-orange-300 shadow-md shadow-orange-500/10 max-w-full">
+            {/* Rotating Subtitle Credential Pill */}
+            <div className="min-h-[2.2rem] flex items-center">
+              <div className="bg-black px-3 py-1.5 border border-orange-500/40 flex items-center gap-2 font-mono text-[11px] sm:text-xs text-orange-300 max-w-full">
                 <span className="text-emerald-400 font-bold shrink-0">▶</span>
                 <span
-                  className={`transition-all duration-300 transform font-semibold leading-snug ${
-                    isAnimating
-                      ? 'opacity-0 translate-y-1.5 scale-98'
-                      : 'opacity-100 translate-y-0 scale-100 text-neutral-100'
+                  className={`transition-all duration-300 font-semibold leading-snug ${
+                    isAnimating ? 'opacity-0 scale-98' : 'opacity-100 scale-100 text-neutral-100'
                   }`}
                 >
                   {ROTATING_CREDENTIALS[activeIdx]}
@@ -116,70 +106,62 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
 
           {/* Profile Overview Description */}
-          <p className="text-neutral-300 text-xs sm:text-base font-sans leading-relaxed max-w-2xl border-l-2 border-orange-500/40 pl-3 sm:pl-3.5">
+          <p className="text-neutral-300 text-xs sm:text-sm font-sans leading-relaxed max-w-2xl border-l-2 border-orange-500/50 pl-3">
             {PROFILE_INFO.bioSummary}
           </p>
 
-          {/* Tactical Engineering Stat Pills */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5 pt-1">
-            <div className="bg-black/70 p-2 sm:p-2.5 rounded border border-orange-500/30 text-center font-mono hover:border-orange-500/60 transition-colors shadow-sm shadow-orange-500/10">
-              <div className="text-[9px] sm:text-[10px] text-neutral-400 uppercase">HARDWARE NODES</div>
-              <div className="text-sm sm:text-lg font-orbitron font-bold text-orange-400">ESP32 / AVR</div>
+          {/* Tactical Stat Pills */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+            <div className="bg-black p-2 border border-orange-500/30 text-center font-mono">
+              <div className="text-[9px] text-neutral-400 uppercase">HARDWARE NODES</div>
+              <div className="text-sm sm:text-base font-orbitron font-bold text-orange-400">ESP32 / AVR</div>
             </div>
-            <div className="bg-black/70 p-2 sm:p-2.5 rounded border border-orange-500/30 text-center font-mono hover:border-orange-500/60 transition-colors shadow-sm shadow-orange-500/10">
-              <div className="text-[9px] sm:text-[10px] text-neutral-400 uppercase">RESEARCH PAPERS</div>
-              <div className="text-sm sm:text-lg font-orbitron font-bold text-orange-400">4 Active</div>
+            <div className="bg-black p-2 border border-orange-500/30 text-center font-mono">
+              <div className="text-[9px] text-neutral-400 uppercase">RESEARCH PAPERS</div>
+              <div className="text-sm sm:text-base font-orbitron font-bold text-orange-400">4 Active</div>
             </div>
-            <div className="bg-black/70 p-2 sm:p-2.5 rounded border border-orange-500/30 text-center font-mono hover:border-orange-500/60 transition-colors shadow-sm shadow-orange-500/10">
-              <div className="text-[9px] sm:text-[10px] text-neutral-400 uppercase">REPOSITORIES</div>
-              <div className="text-sm sm:text-lg font-orbitron font-bold text-orange-400">11+ Repos</div>
+            <div className="bg-black p-2 border border-orange-500/30 text-center font-mono">
+              <div className="text-[9px] text-neutral-400 uppercase">REPOSITORIES</div>
+              <div className="text-sm sm:text-base font-orbitron font-bold text-orange-400">11+ Repos</div>
             </div>
-            <div className="bg-black/70 p-2 sm:p-2.5 rounded border border-orange-500/30 text-center font-mono hover:border-orange-500/60 transition-colors shadow-sm shadow-orange-500/10">
-              <div className="text-[9px] sm:text-[10px] text-neutral-400 uppercase">CORE STACK</div>
-              <div className="text-sm sm:text-lg font-orbitron font-bold text-emerald-400">Python • C++</div>
+            <div className="bg-black p-2 border border-orange-500/30 text-center font-mono">
+              <div className="text-[9px] text-neutral-400 uppercase">CORE STACK</div>
+              <div className="text-sm sm:text-base font-orbitron font-bold text-emerald-400">Python • C++</div>
             </div>
           </div>
 
           {/* Action CTAs */}
-          <div className="flex flex-col xs:flex-row flex-wrap items-stretch xs:items-center gap-2.5 sm:gap-3 pt-2">
+          <div className="flex flex-col xs:flex-row flex-wrap items-stretch xs:items-center gap-2 pt-1">
             <button
-              onClick={onExploreProjects}
-              className="cyber-btn cyber-btn-solid text-xs sm:text-sm py-2.5 sm:py-3 px-5 sm:px-6 font-bold shadow-lg shadow-orange-500/30 justify-center"
+              onClick={() => onNavigateLayer('projects')}
+              className="cyber-btn cyber-btn-solid text-xs py-2.5 px-5 font-bold justify-center"
             >
-              <span>EXPLORE MISSIONS & LABS</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>ENTER MISSIONS & LABS</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
 
-            {onOpenRfScanner && (
-              <button
-                onClick={() => {
-                  cyberAudio.playClick();
-                  onOpenRfScanner();
-                }}
-                className="px-3.5 sm:px-4 py-2.5 sm:py-3 bg-black/80 hover:bg-orange-500/20 border border-orange-500/40 hover:border-orange-400 text-orange-400 font-orbitron font-bold rounded text-xs transition-all flex items-center justify-center gap-2"
-                title="Open WiFi & Bluetooth BLE Discovery Scanner"
-              >
-                <Radio className="w-4 h-4 animate-pulse" />
-                <span>RF / WiFi Scanner</span>
-              </button>
-            )}
+            <button
+              onClick={() => onNavigateLayer('capabilities')}
+              className="cyber-btn cyber-btn-outline text-xs py-2.5 px-4 justify-center"
+            >
+              <span>SYSTEM CAPABILITIES</span>
+            </button>
 
             <button
-              onClick={onOpenTerminal}
-              className="cyber-btn cyber-btn-outline text-xs sm:text-sm py-2.5 sm:py-3 px-4 sm:px-5 justify-center"
+              onClick={() => onNavigateLayer('terminal')}
+              className="cyber-btn cyber-btn-outline text-xs py-2.5 px-4 justify-center"
             >
-              <span>LAUNCH ROOT CLI</span>
+              <span>ROOT CLI</span>
             </button>
           </div>
 
           {/* Social Links & Comms */}
-          <div className="flex items-center gap-4 pt-2 text-neutral-400 font-mono text-xs">
-            <span className="text-orange-400 font-bold">COMMS:</span>
+          <div className="flex items-center gap-4 pt-1 text-neutral-400 font-mono text-xs">
+            <span className="text-orange-400 font-bold">CHANNELS:</span>
             <a
               href={PROFILE_INFO.github}
               target="_blank"
               rel="noreferrer"
-              onClick={() => cyberAudio.playClick()}
               className="hover:text-orange-400 transition-colors flex items-center gap-1"
               title="GitHub Profile"
             >
@@ -189,23 +171,145 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               href={PROFILE_INFO.linkedin}
               target="_blank"
               rel="noreferrer"
-              onClick={() => cyberAudio.playClick()}
               className="hover:text-orange-400 transition-colors flex items-center gap-1"
               title="LinkedIn Profile"
             >
               <LinkedinIcon className="w-4 h-4" />
             </a>
-            <span className="text-neutral-500">|</span>
-            <span className="text-[11px] text-neutral-400 select-all hover:text-white transition-colors">
+            <span className="text-neutral-600">|</span>
+            <span className="text-[11px] text-neutral-300 select-all hover:text-white transition-colors">
               {PROFILE_INFO.email}
             </span>
           </div>
         </div>
 
-        {/* Right Col: 3D Holographic World Globe & Audio Visualizer */}
-        <div className="lg:col-span-5 flex flex-col items-center justify-center relative space-y-4">
-          <ThreeWorldGeoMap />
-          <AudioWaveVisualizer />
+        {/* Right Col: Tactical Layer Switcher Deck & Hardware Telemetry */}
+        <div className="lg:col-span-5 space-y-3 font-mono text-xs">
+          <div className="cyber-card p-4 border border-orange-500/40 space-y-3">
+            <div className="flex items-center justify-between border-b border-orange-500/30 pb-2">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-emerald-400 inline-block" />
+                <span className="font-orbitron font-bold text-white text-xs">
+                  LAYER CONTROL DECK
+                </span>
+              </div>
+              <span className="text-[10px] text-neutral-400">SELECT TO SWITCH</span>
+            </div>
+
+            <div className="grid grid-cols-1 gap-2">
+              <button
+                onClick={() => onNavigateLayer('projects')}
+                className="p-2.5 bg-black hover:bg-neutral-900 border border-neutral-800 hover:border-orange-400 text-left transition-all flex items-center justify-between group"
+              >
+                <div className="flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-orange-400 group-hover:text-emerald-400" />
+                  <div>
+                    <div className="font-orbitron font-bold text-white text-xs group-hover:text-orange-400">
+                      [LAYER 02] MISSIONS & REPOSITORIES
+                    </div>
+                    <div className="text-[10px] text-neutral-400">
+                      9 Verified Repos • SpeakSafe • GyroBot • Flight Booking
+                    </div>
+                  </div>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-neutral-500 group-hover:text-orange-400" />
+              </button>
+
+              <button
+                onClick={() => onNavigateLayer('capabilities')}
+                className="p-2.5 bg-black hover:bg-neutral-900 border border-neutral-800 hover:border-orange-400 text-left transition-all flex items-center justify-between group"
+              >
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4 text-orange-400 group-hover:text-emerald-400" />
+                  <div>
+                    <div className="font-orbitron font-bold text-white text-xs group-hover:text-orange-400">
+                      [LAYER 03] CAPABILITIES & HARDWARE GRAPH
+                    </div>
+                    <div className="text-[10px] text-neutral-400">
+                      Single Interactive Radar Plot • ESP32 • AI-CV • Python
+                    </div>
+                  </div>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-neutral-500 group-hover:text-orange-400" />
+              </button>
+
+              <button
+                onClick={() => onNavigateLayer('achievements')}
+                className="p-2.5 bg-black hover:bg-neutral-900 border border-neutral-800 hover:border-orange-400 text-left transition-all flex items-center justify-between group"
+              >
+                <div className="flex items-center gap-2">
+                  <Award className="w-4 h-4 text-orange-400 group-hover:text-emerald-400" />
+                  <div>
+                    <div className="font-orbitron font-bold text-white text-xs group-hover:text-orange-400">
+                      [LAYER 04] HONORS & RESEARCH PAPERS
+                    </div>
+                    <div className="text-[10px] text-neutral-400">
+                      4 Computational Preprints • Echo Prometheus • Robo Soccer
+                    </div>
+                  </div>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-neutral-500 group-hover:text-orange-400" />
+              </button>
+
+              <button
+                onClick={() => onNavigateLayer('terminal')}
+                className="p-2.5 bg-black hover:bg-neutral-900 border border-neutral-800 hover:border-orange-400 text-left transition-all flex items-center justify-between group"
+              >
+                <div className="flex items-center gap-2">
+                  <Terminal className="w-4 h-4 text-orange-400 group-hover:text-emerald-400" />
+                  <div>
+                    <div className="font-orbitron font-bold text-white text-xs group-hover:text-orange-400">
+                      [LAYER 05] ROOT DEFENSE CLI
+                    </div>
+                    <div className="text-[10px] text-neutral-400">
+                      Interactive Command Shell • Secret Arcade Shooter
+                    </div>
+                  </div>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-neutral-500 group-hover:text-orange-400" />
+              </button>
+
+              <button
+                onClick={() => {
+                  if (onOpenComms) onOpenComms();
+                  else onNavigateLayer('contact');
+                }}
+                className="p-2.5 bg-black hover:bg-neutral-900 border border-neutral-800 hover:border-orange-400 text-left transition-all flex items-center justify-between group"
+              >
+                <div className="flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-orange-400 group-hover:text-emerald-400" />
+                  <div>
+                    <div className="font-orbitron font-bold text-white text-xs group-hover:text-orange-400">
+                      [LAYER 06] ENCRYPTED TRANSMISSION
+                    </div>
+                    <div className="text-[10px] text-neutral-400">
+                      Quick Comms Link • Direct Dispatch • Phone: +91 93423 46217
+                    </div>
+                  </div>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-neutral-500 group-hover:text-orange-400" />
+              </button>
+            </div>
+
+            {/* Quick Actions Footer inside Deck */}
+            <div className="pt-2 border-t border-neutral-800 flex items-center justify-between">
+              <button
+                onClick={onOpenResumeModal}
+                className="text-[11px] text-emerald-400 font-bold hover:underline flex items-center gap-1"
+              >
+                <span>[+] OPEN CV DOSSIER</span>
+              </button>
+              {onOpenRfScanner && (
+                <button
+                  onClick={onOpenRfScanner}
+                  className="text-[11px] text-orange-400 font-bold hover:underline flex items-center gap-1"
+                >
+                  <Radio className="w-3 h-3" />
+                  <span>RF SCANNER</span>
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </section>

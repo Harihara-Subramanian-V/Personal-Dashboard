@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
-import { HudHeader } from './components/HudHeader';
+import { useState, useEffect } from 'react';
+import { HudHeader, type DashboardLayer } from './components/HudHeader';
 import { CyberBackground } from './components/CyberBackground';
 import { HeroSection } from './components/HeroSection';
 import { ProjectsSection } from './components/ProjectsSection';
@@ -10,34 +10,23 @@ import { SlideOverCommsDrawer } from './components/SlideOverCommsDrawer';
 import { ResumeDossierModal } from './components/ResumeDossierModal';
 import { WirelessDeviceScanner } from './components/WirelessDeviceScanner';
 import { CyberStarShooter } from './components/CyberStarShooter';
-import { CyberCardTransition } from './components/CyberCardTransition';
 import { CustomCursor } from './components/CustomCursor';
-import { CyberGhostJumpscare } from './components/CyberGhostJumpscare';
-import { ChevronUp, Terminal } from 'lucide-react';
-import { cyberAudio } from './utils/audio';
+import { Terminal, Mail } from 'lucide-react';
 
 export function App() {
-  const [showMatrixRain, setShowMatrixRain] = useState<boolean>(true);
+  const [activeLayer, setActiveLayer] = useState<DashboardLayer>('overview');
   const [isResumeOpen, setIsResumeOpen] = useState<boolean>(false);
   const [isRfScannerOpen, setIsRfScannerOpen] = useState<boolean>(false);
   const [isStarShooterOpen, setIsStarShooterOpen] = useState<boolean>(false);
   const [isCommsOpen, setIsCommsOpen] = useState<boolean>(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
-  const [jumpscareCount, setJumpscareCount] = useState<number>(0);
 
-  const terminalRef = useRef<HTMLDivElement | null>(null);
-
-  // Focus on hero header at top when page opens & play Windows XP startup sound
+  // Secret global hotkey: Shift + S or ` (backtick) triggers hidden Star Shooter game
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    cyberAudio.playWindowsXpStartup();
-
-    // Secret global hotkey: Shift + S or ` (backtick) triggers hidden Star Shooter game
     const handleSecretKey = (e: KeyboardEvent) => {
       if ((e.shiftKey && (e.key === 'S' || e.key === 's')) || e.key === '`' || e.key === '~') {
         e.preventDefault();
         setIsStarShooterOpen(true);
-        cyberAudio.playAccessGranted();
       }
     };
 
@@ -45,24 +34,9 @@ export function App() {
     return () => window.removeEventListener('keydown', handleSecretKey);
   }, []);
 
-  const scrollToTerminal = () => {
-    cyberAudio.playClick();
-    terminalRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const scrollToProjects = () => {
-    cyberAudio.playClick();
-    const el = document.getElementById('projects');
-    el?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   const handleOpenProjectModal = (projectId: string) => {
     setSelectedProjectId(projectId);
-    scrollToProjects();
-  };
-
-  const handleTriggerJumpscare = () => {
-    setJumpscareCount((c) => c + 1);
+    setActiveLayer('projects');
   };
 
   return (
@@ -70,142 +44,194 @@ export function App() {
       {/* Custom Cyber Reticle Cursor */}
       <CustomCursor />
 
-      {/* Subtle Holographic Ace Cards & Chess Transition Micro-HUD */}
-      <CyberCardTransition />
-
-      {/* Cyber Ghost Jumpscare System */}
-      <CyberGhostJumpscare manualTriggerCount={jumpscareCount} />
-
-      {/* Dynamic Animated Canvas Background with Matrix Rain by default */}
-      <CyberBackground showMatrixRain={showMatrixRain} />
+      {/* Static High-Performance Tactical Grid Background */}
+      <CyberBackground />
 
       {/* Main Content Layout Container */}
       <div className="relative z-10 flex flex-col min-h-screen">
-        {/* Top HUD Telemetry & Navigation */}
+        {/* Top HUD Telemetry & Multi-Layer Navigation */}
         <HudHeader
-          showMatrixRain={showMatrixRain}
-          onToggleMatrix={() => setShowMatrixRain((prev) => !prev)}
+          activeLayer={activeLayer}
+          onSelectLayer={(layer) => setActiveLayer(layer)}
           onOpenResumeModal={() => setIsResumeOpen(true)}
           onOpenRfScanner={() => setIsRfScannerOpen(true)}
           onOpenComms={() => setIsCommsOpen(true)}
         />
 
-        {/* Main Body Viewports */}
-        <main className="flex-1 space-y-6 sm:space-y-10">
-          {/* Section 1: Hero Hologram Command */}
-          <HeroSection
-            onOpenTerminal={scrollToTerminal}
-            onExploreProjects={scrollToProjects}
-            onOpenRfScanner={() => setIsRfScannerOpen(true)}
-          />
+        {/* Tactical Layer Body Viewports (Only active layer is rendered) */}
+        <main className="flex-1 max-w-7xl mx-auto px-4 py-4 w-full">
+          {/* LAYER 01: OVERVIEW & BIOGRAPHY */}
+          {activeLayer === 'overview' && (
+            <div className="animate-in fade-in duration-200">
+              <HeroSection
+                onNavigateLayer={(layer) => setActiveLayer(layer)}
+                onOpenRfScanner={() => setIsRfScannerOpen(true)}
+                onOpenComms={() => setIsCommsOpen(true)}
+                onOpenResumeModal={() => setIsResumeOpen(true)}
+              />
+            </div>
+          )}
 
-          {/* Section 2: Projects & Architecture Labs */}
-          <ProjectsSection
-            selectedProjectId={selectedProjectId}
-            onClearSelectedProject={() => setSelectedProjectId(null)}
-          />
+          {/* LAYER 02: MISSIONS & LABS */}
+          {activeLayer === 'projects' && (
+            <div className="animate-in fade-in duration-200">
+              <ProjectsSection
+                selectedProjectId={selectedProjectId}
+                onClearSelectedProject={() => setSelectedProjectId(null)}
+              />
+            </div>
+          )}
 
-          {/* Section 3: Skill & Hardware Defense Matrix */}
-          <SkillDefenseMatrix />
+          {/* LAYER 03: CAPABILITIES & HARDWARE MATRIX */}
+          {activeLayer === 'capabilities' && (
+            <div className="animate-in fade-in duration-200">
+              <SkillDefenseMatrix />
+            </div>
+          )}
 
-          {/* Section 4: Achievements, Research Papers & Honors */}
-          <AchievementsSection />
+          {/* LAYER 04: HONORS & RESEARCH PAPERS */}
+          {activeLayer === 'achievements' && (
+            <div className="animate-in fade-in duration-200">
+              <AchievementsSection />
+            </div>
+          )}
 
-          {/* Section 5: Interactive Root Hacker CLI Terminal */}
-          <section id="terminal" ref={terminalRef} className="py-8 sm:py-12">
-            <div className="max-w-5xl mx-auto px-4 space-y-4">
-              <div className="border-b border-orange-500/30 pb-3 flex items-center justify-between">
+          {/* LAYER 05: ROOT DEFENSE CLI TERMINAL */}
+          {activeLayer === 'terminal' && (
+            <div className="animate-in fade-in duration-200 max-w-5xl mx-auto space-y-4">
+              <div className="border-b border-orange-500/30 pb-2 flex items-center justify-between font-mono">
                 <div>
-                  <div className="text-xs font-mono text-orange-400 font-bold tracking-widest uppercase flex items-center gap-2">
+                  <div className="text-xs text-orange-400 font-bold uppercase flex items-center gap-2">
                     <Terminal className="w-4 h-4" /> [SECTION 05] // ROOT COMMAND LINE ACCESS
                   </div>
-                  <h2 className="font-orbitron font-black text-xl sm:text-3xl text-white mt-0.5">
+                  <h2 className="font-orbitron font-black text-xl sm:text-2xl text-white mt-0.5">
                     INTERACTIVE DEFENSE CONSOLE
                   </h2>
                 </div>
-                <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/30 hidden sm:inline">
+                <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 border border-emerald-500/30">
                   SSH PORT: 22 // AES-256
                 </span>
               </div>
 
               <CyberTerminal
-                onToggleMatrix={() => setShowMatrixRain((prev) => !prev)}
+                onToggleMatrix={() => {}}
                 onOpenProject={handleOpenProjectModal}
-                onTriggerJumpscare={handleTriggerJumpscare}
+                onTriggerJumpscare={() => {}}
                 onOpenRfScanner={() => setIsRfScannerOpen(true)}
                 onOpenStarShooter={() => setIsStarShooterOpen(true)}
                 onOpenComms={() => setIsCommsOpen(true)}
               />
             </div>
-          </section>
+          )}
+
+          {/* LAYER 06: ENCRYPTED COMMS & TRANSMISSION */}
+          {activeLayer === 'contact' && (
+            <div className="animate-in fade-in duration-200 max-w-3xl mx-auto space-y-4 font-mono text-xs">
+              <div className="border-b border-orange-500/30 pb-2 flex items-center justify-between">
+                <div>
+                  <div className="text-xs text-emerald-400 font-bold uppercase flex items-center gap-2">
+                    <Mail className="w-4 h-4" /> [SECTION 06] // ENCRYPTED COMMS BEACON
+                  </div>
+                  <h2 className="font-orbitron font-black text-xl text-white mt-0.5">
+                    ESTABLISH DIRECT TRANSMISSION
+                  </h2>
+                </div>
+                <button
+                  onClick={() => setIsCommsOpen(true)}
+                  className="px-3 py-1.5 bg-orange-500 hover:bg-orange-400 text-black font-bold font-orbitron text-xs"
+                >
+                  OPEN DRAWER
+                </button>
+              </div>
+
+              <div className="cyber-card p-5 border border-orange-500/40 space-y-3">
+                <div className="text-white font-bold font-orbitron text-sm">DIRECT OPERATOR CHANNELS:</div>
+                <div className="p-3 bg-black border border-neutral-800 space-y-1">
+                  <div className="text-neutral-400 text-[10px]">EMAIL (PRIMARY INBOX):</div>
+                  <div className="text-orange-400 font-bold text-sm select-all">harishv2911@gmail.com</div>
+                </div>
+                <div className="p-3 bg-black border border-neutral-800 space-y-1">
+                  <div className="text-neutral-400 text-[10px]">DIRECT TELEPHONE LINE:</div>
+                  <div className="text-emerald-400 font-bold text-sm select-all">+91 93423 46217</div>
+                </div>
+                <div className="p-3 bg-black border border-neutral-800 space-y-1">
+                  <div className="text-neutral-400 text-[10px]">CURRENT NODE LOCATION:</div>
+                  <div className="text-white font-bold">Vellore Institute of Technology (VIT), Tamil Nadu, India</div>
+                </div>
+              </div>
+            </div>
+          )}
         </main>
 
-        {/* Cyberpunk Telemetry Footer */}
-        <footer className="mt-8 sm:mt-12 border-t border-orange-500/30 bg-black/90 py-6 px-4 font-mono text-xs text-neutral-400">
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+        {/* Cyberpunk Sharp Telemetry Footer */}
+        <footer className="mt-8 border-t border-orange-500/30 bg-black py-4 px-4 font-mono text-xs text-neutral-400">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-2.5 h-2.5 rounded-full bg-orange-500 animate-ping" />
+              <div className="w-2 h-2 bg-orange-500 inline-block" />
               <div>
-                <div className="font-orbitron font-bold text-white text-sm">
+                <div className="font-orbitron font-bold text-white text-xs">
                   HARIHARA SUBRAMANIAN V
                 </div>
                 <div className="text-[10px] text-orange-400">
-                  IT Undergrad @ VIT Vellore • Autonomous Robotics, Embedded IoT & AI/ML
+                  VIT Vellore (B.Tech IT) & IIT Madras (BS Data Science)
                 </div>
               </div>
             </div>
 
-            <div className="text-center sm:text-right text-[11px] text-neutral-500 space-y-1">
-              <div>DEFENSE_CORE v3.7 // ALL SYSTEMS OPERATIONAL</div>
-              <div>
-                © {new Date().getFullYear()} Harihara Subramanian V. All rights reserved.{' '}
-                {/* Secret Easter Egg Click Pixel for Star Shooter */}
-                <button
-                  onClick={() => {
-                    setIsStarShooterOpen(true);
-                    cyberAudio.playAccessGranted();
-                  }}
-                  className="inline-block w-1.5 h-1.5 rounded-full bg-orange-500/30 hover:bg-orange-400 hover:shadow-[0_0_8px_#ff8800] transition-all cursor-crosshair ml-1"
-                  title="•••"
-                />
-              </div>
+            {/* Quick Layer Switcher Pills in Footer */}
+            <div className="flex flex-wrap items-center gap-1 font-mono text-[10px]">
+              <button
+                onClick={() => setActiveLayer('overview')}
+                className={`px-2 py-0.5 border ${activeLayer === 'overview' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
+              >
+                01_OVERVIEW
+              </button>
+              <button
+                onClick={() => setActiveLayer('projects')}
+                className={`px-2 py-0.5 border ${activeLayer === 'projects' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
+              >
+                02_MISSIONS
+              </button>
+              <button
+                onClick={() => setActiveLayer('capabilities')}
+                className={`px-2 py-0.5 border ${activeLayer === 'capabilities' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
+              >
+                03_CAPABILITIES
+              </button>
+              <button
+                onClick={() => setActiveLayer('achievements')}
+                className={`px-2 py-0.5 border ${activeLayer === 'achievements' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
+              >
+                04_HONORS
+              </button>
+              <button
+                onClick={() => setActiveLayer('terminal')}
+                className={`px-2 py-0.5 border ${activeLayer === 'terminal' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
+              >
+                05_CLI
+              </button>
             </div>
 
             <div className="flex items-center gap-2">
               <button
-                onClick={() => {
-                  cyberAudio.playScanSweep();
-                  setIsCommsOpen(true);
-                }}
-                className="p-2.5 rounded bg-orange-500/10 hover:bg-orange-500 hover:text-black border border-orange-500/40 text-orange-400 transition-all font-orbitron font-bold text-[11px]"
-                title="Open Comms Link"
+                onClick={() => setIsCommsOpen(true)}
+                className="px-2.5 py-1 bg-neutral-900 hover:bg-orange-500 hover:text-black border border-orange-500/40 text-orange-400 text-[11px] font-bold font-orbitron"
               >
-                TRANSMISSION
-              </button>
-
-              <button
-                onClick={() => {
-                  cyberAudio.playClick();
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                className="p-2.5 rounded bg-neutral-900 hover:bg-orange-500 hover:text-black border border-orange-500/30 text-orange-400 transition-all flex items-center gap-1 text-[11px]"
-                title="Return to top HUD"
-              >
-                <ChevronUp className="w-4 h-4" /> TOP
+                COMMS
               </button>
             </div>
           </div>
         </footer>
       </div>
 
-      {/* Persistent Right-Edge Side-Pull Comms Link Drawer */}
+      {/* Persistent Side Comms Link Drawer */}
       <SlideOverCommsDrawer
         isOpen={isCommsOpen}
         onClose={() => setIsCommsOpen(false)}
         onOpen={() => setIsCommsOpen(true)}
       />
 
-      {/* Curriculum Vitae / Dossier Modal */}
+      {/* CV Dossier Modal (View freely, PIN on download) */}
       <ResumeDossierModal
         isOpen={isResumeOpen}
         onClose={() => setIsResumeOpen(false)}
@@ -217,7 +243,7 @@ export function App() {
         onClose={() => setIsRfScannerOpen(false)}
       />
 
-      {/* Secret Star Shooter Arcade Game */}
+      {/* Cyber Star Shooter Arcade Game */}
       <CyberStarShooter
         isOpen={isStarShooterOpen}
         onClose={() => setIsStarShooterOpen(false)}

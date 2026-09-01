@@ -130,21 +130,17 @@ export const SlideOverCommsDrawer: React.FC<SlideOverCommsDrawerProps> = ({
 
   return (
     <>
-      {/* 1. Right-Side Persistent Cyber Pull Handle (Inspired by VinHack) */}
+      {/* 1. Right-Side Persistent Cyber Pull Handle */}
       {!isOpen && (
         <button
-          onClick={() => {
-            cyberAudio.playScanSweep();
-            onOpen();
-          }}
+          onClick={() => onOpen()}
           className="fixed top-1/2 -translate-y-1/2 right-0 z-40 group flex items-center select-none"
           title="Open Encrypted Comms Link"
         >
-          <div className="bg-neutral-950/90 hover:bg-neutral-900 border-y border-l border-orange-500/50 hover:border-emerald-400 p-2.5 rounded-l-xl shadow-2xl shadow-orange-500/20 backdrop-blur-md transition-all flex flex-col items-center gap-2">
-            {/* Pulsing Beacon Light */}
+          <div className="bg-black hover:bg-neutral-900 border-y border-l border-orange-500 p-2 shadow-2xl transition-all flex flex-col items-center gap-2">
+            {/* Beacon Light */}
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              <span className="inline-flex h-full w-full bg-emerald-400" />
             </span>
 
             {/* Vertical Cyber Text */}
@@ -154,7 +150,7 @@ export const SlideOverCommsDrawer: React.FC<SlideOverCommsDrawerProps> = ({
               <span>L I N K</span>
             </div>
 
-            <Radio className="w-3.5 h-3.5 text-orange-400 group-hover:text-emerald-400 animate-pulse mt-1" />
+            <Radio className="w-3.5 h-3.5 text-orange-400 group-hover:text-emerald-400 mt-1" />
           </div>
         </button>
       )}
@@ -163,34 +159,31 @@ export const SlideOverCommsDrawer: React.FC<SlideOverCommsDrawerProps> = ({
       {isOpen && (
         <div
           onClick={onClose}
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm transition-opacity animate-in fade-in duration-300"
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm transition-opacity animate-in fade-in duration-200"
         />
       )}
 
       {/* 3. Slide-Over Comms Drawer Cyber Deck Panel */}
       <div
-        className={`fixed top-0 right-0 bottom-0 z-50 w-full max-w-xl bg-neutral-950/98 border-l border-orange-500/50 shadow-2xl shadow-orange-500/20 backdrop-blur-xl transition-transform duration-400 ease-out transform overflow-y-auto flex flex-col font-mono text-xs ${
+        className={`fixed top-0 right-0 bottom-0 z-50 w-full max-w-xl bg-neutral-950 border-l border-orange-500 shadow-2xl transition-transform duration-300 ease-out transform overflow-y-auto flex flex-col font-mono text-xs ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Drawer Header */}
-        <div className="p-5 bg-black/90 border-b border-orange-500/30 flex items-center justify-between sticky top-0 z-20">
-          <div className="space-y-1">
+        <div className="p-4 bg-black border-b border-orange-500/40 flex items-center justify-between sticky top-0 z-20">
+          <div className="space-y-0.5">
             <div className="text-[10px] text-emerald-400 font-bold tracking-widest uppercase flex items-center gap-2">
-              <Radio className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+              <Radio className="w-3.5 h-3.5 text-emerald-400" />
               <span>[SECTION 06] // ENCRYPTED COMMS BEACON</span>
             </div>
-            <h2 className="font-orbitron font-black text-lg sm:text-xl text-white">
+            <h2 className="font-orbitron font-black text-base sm:text-lg text-white">
               ESTABLISH SECURE COMMS LINK
             </h2>
           </div>
 
           <button
-            onClick={() => {
-              cyberAudio.playClick();
-              onClose();
-            }}
-            className="p-2 rounded bg-neutral-900 hover:bg-orange-500 hover:text-black border border-neutral-800 text-neutral-300 transition-all flex items-center gap-1 font-orbitron text-xs"
+            onClick={onClose}
+            className="p-1.5 bg-neutral-900 hover:bg-orange-500 hover:text-black border border-neutral-800 text-neutral-300 transition-all flex items-center gap-1 font-orbitron text-xs"
             title="Close Drawer (ESC)"
           >
             <X className="w-4 h-4" />
@@ -199,21 +192,21 @@ export const SlideOverCommsDrawer: React.FC<SlideOverCommsDrawerProps> = ({
         </div>
 
         {/* Drawer Scrollable Content */}
-        <div className="p-5 sm:p-6 space-y-6 flex-1">
+        <div className="p-4 sm:p-5 space-y-4 flex-1">
           {/* Clearance & Channel Badges */}
-          <div className="cyber-card rounded-lg p-4 space-y-3">
+          <div className="cyber-card p-4 space-y-3 border border-orange-500/40">
             <div className="text-orange-400 font-bold font-orbitron text-xs uppercase flex items-center justify-between">
               <span className="flex items-center gap-1.5">
                 <Lock className="w-3.5 h-3.5 text-emerald-400" />
                 <span>DIRECT CHANNELS & CLEARANCES</span>
               </span>
-              <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold">
+              <span className="text-[10px] px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold">
                 OPERATIONAL
               </span>
             </div>
 
             {/* Email Box with Copy */}
-            <div className="p-3 bg-black/70 rounded border border-orange-500/30 flex items-center justify-between font-mono text-xs">
+            <div className="p-3 bg-black border border-orange-500/30 flex items-center justify-between font-mono text-xs">
               <div className="space-y-0.5">
                 <div className="text-[10px] text-neutral-500">PRIMARY ENCRYPTED INBOX</div>
                 <div className="font-bold text-white text-sm">{PROFILE_INFO.email}</div>

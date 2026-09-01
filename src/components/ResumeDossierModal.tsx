@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, Download, Award, GraduationCap, Code, ShieldCheck, AlertTriangle, Printer, Check, X } from 'lucide-react';
+import { Lock, Download, Award, GraduationCap, Code, ShieldCheck, AlertTriangle, Check, X } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { CyberModal } from './CyberModal';
 import { PROFILE_INFO, PROJECTS_DATA, RESEARCH_PAPERS, ACHIEVEMENTS_DATA } from '../data/profileData';
@@ -122,10 +122,6 @@ RFC Compliant Security Dossier
     setErrorMsg('');
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
-
   return (
     <CyberModal
       isOpen={isOpen}
@@ -135,7 +131,7 @@ RFC Compliant Security Dossier
       clearance="CLEARANCE: DEFCON 1 // CV VIEWABLE"
     >
       <div className="space-y-4 font-mono text-xs text-neutral-300">
-        {/* Top Summary Banner with Actions */}
+        {/* Top Summary Banner with Download Action */}
         <div className="bg-black p-3.5 border border-orange-500/40 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <div>
             <div className="flex items-center gap-2">
@@ -152,23 +148,14 @@ RFC Compliant Security Dossier
             </div>
           </div>
 
-          <div className="flex items-center gap-2 w-full sm:w-auto">
+          <div className="w-full sm:w-auto">
             <button
               onClick={handleRequestDownload}
-              className="flex-1 sm:flex-initial px-3 py-2 bg-orange-500 hover:bg-orange-400 text-black font-orbitron font-bold text-xs transition-all flex items-center justify-center gap-1.5 active:scale-95"
+              className="w-full sm:w-auto px-4 py-2 bg-orange-500 hover:bg-orange-400 text-black font-orbitron font-bold text-xs transition-all flex items-center justify-center gap-1.5 active:scale-95"
               title="Download official text CV (PIN verification required)"
             >
               {downloadSuccess ? <Check className="w-3.5 h-3.5" /> : <Download className="w-3.5 h-3.5" />}
               <span>{downloadSuccess ? 'DOWNLOADED' : 'DOWNLOAD CV (PIN)'}</span>
-            </button>
-
-            <button
-              onClick={handlePrint}
-              className="px-3 py-2 bg-black hover:bg-neutral-900 border border-neutral-800 hover:border-orange-500/50 text-neutral-300 hover:text-white text-xs font-mono transition-all flex items-center gap-1.5"
-              title="Print CV Dossier"
-            >
-              <Printer className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">PRINT</span>
             </button>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowRight, Trophy, Bot, Cpu, Radio, Layers, ShieldCheck, Terminal, Award, Mail, BarChart2, Camera, ChevronDown, ChevronUp } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './CyberIcons';
 import { CyberVCardFlip } from './CyberVCardFlip';
@@ -39,12 +39,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const [activeIdx, setActiveIdx] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [showHomeGraph, setShowHomeGraph] = useState(false);
-
   const [animStage, setAnimStage] = useState<'intro' | 'gliding' | 'settled'>(isIntro ? 'intro' : 'settled');
-  const [glideStyle, setGlideStyle] = useState<React.CSSProperties>({});
-  
-  const targetSlotRef = useRef<HTMLDivElement | null>(null);
-  const movingNameRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!isIntro && animStage === 'intro') {
@@ -65,55 +60,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   const handleStartGlide = () => {
     if (animStage !== 'intro') return;
-
-    const movingEl = movingNameRef.current;
-    const targetEl = targetSlotRef.current;
-
-    if (movingEl && targetEl) {
-      const startRect = movingEl.getBoundingClientRect();
-      const targetRect = targetEl.getBoundingClientRect();
-
-      const deltaX = targetRect.left - startRect.left;
-      const deltaY = targetRect.top - startRect.top;
-      const scale = targetRect.width / startRect.width;
-
-      setGlideStyle({
-        transform: `translate3d(${deltaX}px, ${deltaY}px, 0) scale(${scale})`,
-        transformOrigin: 'top left',
-        transition: 'transform 1.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.6s ease-out',
-      });
-
-      setAnimStage('gliding');
-
-      setTimeout(() => {
-        onEnterDashboard();
-      }, 400);
-
-      setTimeout(() => {
-        setAnimStage('settled');
-        setGlideStyle({});
-      }, 1650);
-    } else {
-      onEnterDashboard();
+    setAnimStage('gliding');
+    onEnterDashboard();
+    setTimeout(() => {
       setAnimStage('settled');
-    }
+    }, 1200);
   };
 
   return (
     <section id="overview" className="relative py-2 sm:py-4 overflow-hidden space-y-6">
-      {/* 1. CINEMATIC GLIDING NAME */}
+      {/* 1. CINEMATIC PURE SPLASH GATE OVERLAY (Centered 2-line name without any other text/boxes) */}
       {animStage !== 'settled' && (
         <div
           onClick={handleStartGlide}
-          className={`fixed inset-0 z-50 flex items-center justify-center cursor-pointer select-none transition-colors duration-700 ${
-            animStage === 'intro' ? 'bg-[#070709]' : 'bg-transparent pointer-events-none'
+          className={`fixed inset-0 z-50 flex items-center justify-center cursor-pointer select-none transition-all duration-1000 ease-out ${
+            animStage === 'intro' ? 'bg-[#070709] opacity-100' : 'bg-transparent opacity-0 pointer-events-none'
           }`}
         >
-          <div
-            ref={movingNameRef}
-            style={glideStyle}
-            className="text-center group transition-transform duration-500 ease-out"
-          >
+          <div className="text-center group transition-transform duration-500 ease-out hover:scale-105">
             <h1 className="font-orbitron font-black text-4xl xs:text-5xl sm:text-7xl md:text-8xl tracking-tight uppercase leading-none text-center">
               <span className="block text-white drop-shadow-[0_0_35px_rgba(255,255,255,0.3)]">
                 HARIHARA
@@ -160,14 +124,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
           </div>
 
-          {/* Step 2: Target Placeholder for Hero Name */}
-          <div ref={targetSlotRef} className="min-h-[72px] sm:min-h-[96px]">
-            {animStage === 'settled' && (
-              <h1 className="font-orbitron font-black text-3xl xs:text-4xl sm:text-5xl lg:text-6xl tracking-tight uppercase select-none leading-none break-words">
-                <span className="text-white block">HARIHARA</span>
-                <span className="text-orange-400 block mt-1">SUBRAMANIAN V</span>
-              </h1>
-            )}
+          {/* Step 2: Pixel-Perfect Left-Aligned 2-Line Hero Name (1.0s delay) */}
+          <div style={{ animation: 'slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.8s both' }} className="pt-1">
+            <h1 className="font-orbitron font-black text-3xl xs:text-4xl sm:text-5xl lg:text-6xl tracking-tight uppercase select-none leading-none text-left break-words">
+              <span className="text-white block">HARIHARA</span>
+              <span className="text-orange-400 block mt-1.5">SUBRAMANIAN V</span>
+            </h1>
           </div>
 
           {/* Step 3: Rotating Subtitle Credential Pill (1.5s delay — 1.0s gap) */}

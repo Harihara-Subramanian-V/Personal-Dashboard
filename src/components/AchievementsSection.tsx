@@ -5,7 +5,7 @@ import { ACHIEVEMENTS_DATA } from '../data/profileData';
 export const AchievementsSection: React.FC = () => {
   return (
     <section id="achievements" className="py-16 border-t border-zinc-800/80">
-      <div className="max-w-5xl mx-auto space-y-8">
+      <div className="w-full space-y-8">
         
         {/* Section Header */}
         <div className="space-y-1.5">

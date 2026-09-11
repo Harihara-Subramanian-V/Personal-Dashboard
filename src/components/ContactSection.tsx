@@ -35,7 +35,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onDownloadVCard 
 
   return (
     <section id="contact" className="py-16 border-t border-zinc-800/80">
-      <div className="max-w-4xl mx-auto space-y-10">
+      <div className="w-full space-y-10">
         
         {/* Section Header */}
         <div className="space-y-1.5 text-center sm:text-left">

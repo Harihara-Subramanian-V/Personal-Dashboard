@@ -6,7 +6,7 @@ export const HardwareSkillsSection: React.FC = () => {
 
   return (
     <section id="hardware-skills" className="py-16 border-t border-zinc-800/80">
-      <div className="max-w-5xl mx-auto space-y-12">
+      <div className="w-full space-y-12">
         
         {/* Hardware Inventory Section */}
         <div className="space-y-6">
@@ -97,30 +97,35 @@ export const HardwareSkillsSection: React.FC = () => {
             ))}
           </div>
 
-          {/* Skills Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 animate-fade-in">
+          {/* Skills Grid (Up to 4 columns on large screens) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 animate-fade-in">
             {SKILL_CATEGORIES[activeSkillCategory].skills.map((skill) => (
               <div
                 key={skill.name}
-                className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800/70 hover:border-zinc-700/80 transition-all space-y-1.5"
+                className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800/70 hover:border-zinc-700/80 transition-all space-y-1.5 flex flex-col justify-between"
               >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-sm font-semibold text-white">{skill.name}</span>
-                  <span
-                    className={`text-[10px] font-mono px-2 py-0.5 rounded font-medium ${
-                      skill.level === 'Core'
-                        ? 'bg-amber-500/10 text-amber-300 border border-amber-500/30'
-                        : skill.level === 'Advanced'
-                        ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/30'
-                        : 'bg-zinc-800 text-zinc-300 border border-zinc-700'
-                    }`}
-                  >
-                    {skill.level} • {skill.experience}
-                  </span>
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between gap-1.5 flex-wrap">
+                    <span className="text-sm font-semibold text-white">{skill.name}</span>
+                    <span
+                      className={`text-[10px] font-mono px-1.5 py-0.5 rounded font-medium ${
+                        skill.level === 'Core'
+                          ? 'bg-amber-500/10 text-amber-300 border border-amber-500/30'
+                          : skill.level === 'Advanced'
+                          ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/30'
+                          : 'bg-zinc-800 text-zinc-300 border border-zinc-700'
+                      }`}
+                    >
+                      {skill.level}
+                    </span>
+                  </div>
+                  <p className="text-xs text-zinc-400 leading-relaxed">
+                    {skill.description}
+                  </p>
                 </div>
-                <p className="text-xs text-zinc-400 leading-relaxed">
-                  {skill.description}
-                </p>
+                <div className="pt-2 text-[10px] font-mono text-zinc-500 border-t border-zinc-800/50">
+                  Experience: {skill.experience}
+                </div>
               </div>
             ))}
           </div>

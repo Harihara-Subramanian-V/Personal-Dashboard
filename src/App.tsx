@@ -75,8 +75,8 @@ END:VCARD`;
         onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
       />
 
-      {/* Main Single-Page Content Container */}
-      <main className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 space-y-4">
+      {/* Main Single-Page Content Container (Spans full wide desktop real estate) */}
+      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
         {/* About & Hero Section */}
         <HeroSection
@@ -107,7 +107,7 @@ END:VCARD`;
 
       {/* Clean Footer */}
       <footer className="relative z-10 border-t border-zinc-800/80 mt-20 py-8 text-xs text-zinc-500 font-sans">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <span>© {new Date().getFullYear()} Harihara Subramanian V</span>
             <span>•</span>
@@ -120,6 +120,7 @@ END:VCARD`;
               target="_blank"
               rel="noreferrer"
               className="text-zinc-400 hover:text-zinc-200 transition-colors"
+              title="GitHub Profile"
             >
               <GithubIcon className="w-4 h-4" />
             </a>
@@ -128,6 +129,7 @@ END:VCARD`;
               target="_blank"
               rel="noreferrer"
               className="text-zinc-400 hover:text-zinc-200 transition-colors"
+              title="LinkedIn Profile"
             >
               <LinkedinIcon className="w-4 h-4" />
             </a>

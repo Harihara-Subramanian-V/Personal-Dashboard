@@ -29,7 +29,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
 
   return (
     <section id="projects" className="py-16 border-t border-zinc-800/80">
-      <div className="max-w-5xl mx-auto space-y-8">
+      <div className="w-full space-y-8">
         
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -63,24 +63,24 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
           </div>
         </div>
 
-        {/* Project Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {/* Project Cards Grid (1 col on mobile, 2 on tablet, 3 on large screens) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredProjects.map((project: Project) => (
             <div
               key={project.id}
-              className="group p-6 rounded-2xl bg-zinc-900/50 border border-zinc-800/80 hover:border-zinc-700 transition-all duration-200 hover:bg-zinc-900/80 flex flex-col justify-between space-y-5"
+              className="group p-5 rounded-2xl bg-zinc-900/50 border border-zinc-800/80 hover:border-zinc-700 transition-all duration-200 hover:bg-zinc-900/80 flex flex-col justify-between space-y-4"
             >
               {/* Card Top */}
-              <div className="space-y-3.5">
+              <div className="space-y-3">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-md bg-zinc-800 text-zinc-300 border border-zinc-700/60">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-zinc-800 text-zinc-300 border border-zinc-700/60">
                     {project.categoryLabel}
                   </span>
                   <span className="text-xs font-mono text-zinc-400">{project.year}</span>
                 </div>
 
                 <div className="space-y-1">
-                  <h3 className="text-lg font-bold text-white group-hover:text-amber-300 transition-colors">
+                  <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-amber-300 transition-colors">
                     {project.title}
                   </h3>
                   <p className="text-xs text-zinc-400 font-medium">
@@ -88,7 +88,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                   </p>
                 </div>
 
-                <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
+                <p className="text-xs text-zinc-300 leading-relaxed">
                   {project.description}
                 </p>
 
@@ -106,13 +106,13 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
               </div>
 
               {/* Card Bottom: Tech Stack & Actions */}
-              <div className="space-y-4 pt-4 border-t border-zinc-800/60">
+              <div className="space-y-3.5 pt-3.5 border-t border-zinc-800/60">
                 {/* Tech Stack Pills */}
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-1">
                   {project.techStack.map((tech) => (
                     <span
                       key={tech}
-                      className="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-950/60 text-zinc-400 border border-zinc-800"
+                      className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-950/60 text-zinc-400 border border-zinc-800"
                     >
                       {tech}
                     </span>
@@ -128,7 +128,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-medium transition-colors cursor-pointer"
                   >
                     <GithubIcon className="w-3.5 h-3.5" />
-                    <span>View Repository</span>
+                    <span>Repository</span>
                     <ExternalLink className="w-3 h-3 text-zinc-400 ml-0.5" />
                   </a>
 
@@ -138,7 +138,7 @@ export const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-medium transition-colors cursor-pointer"
                     >
                       <Play className="w-3 h-3 fill-amber-300" />
-                      <span>Live Canvas Demo</span>
+                      <span>Live Demo</span>
                     </button>
                   )}
                 </div>

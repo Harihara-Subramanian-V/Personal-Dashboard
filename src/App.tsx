@@ -10,7 +10,6 @@ import { ContactSection } from './components/ContactSection';
 import { ResumeDossierModal } from './components/ResumeDossierModal';
 import { CommandPalette } from './components/CommandPalette';
 import { ImageAugmentationModal } from './components/ImageAugmentationModal';
-import { DesktopSideRails } from './components/DesktopSideRails';
 import { GithubIcon, LinkedinIcon } from './components/SocialIcons';
 import { PROFILE_INFO } from './data/profileData';
 import { ArrowUp } from 'lucide-react';
@@ -65,22 +64,19 @@ END:VCARD`;
   };
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-[#f4f4f5] relative font-sans selection:bg-amber-500/30 selection:text-amber-200">
+    <div className="min-h-screen bg-[#09090b] text-[#f4f4f5] relative font-sans selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden">
       
-      {/* Ambient Grid & Architectural Guidelines Background */}
+      {/* Ambient Subtle Background */}
       <CyberBackground />
 
-      {/* Fixed Sticky Glass Navbar */}
+      {/* Sticky Top Navbar */}
       <Navbar
         onOpenResumeModal={() => setIsResumeOpen(true)}
         onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
       />
 
-      {/* Desktop Floating Side Rails (Active on wide laptop & desktop screens) */}
-      <DesktopSideRails onDownloadVCard={handleDownloadVCard} />
-
-      {/* Main Single-Page Content Container */}
-      <main className="relative z-10 max-w-6xl xl:max-w-7xl 2xl:max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 space-y-8">
+      {/* Main Single-Page Content Container (Properly centered & aligned with no overlapping sidebars) */}
+      <main className="relative z-10 max-w-6xl xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 space-y-12">
         
         {/* About & Hero Section */}
         <HeroSection
@@ -111,7 +107,7 @@ END:VCARD`;
 
       {/* Clean Footer */}
       <footer className="relative z-10 border-t border-zinc-800/80 mt-20 py-8 text-xs text-zinc-500 font-sans">
-        <div className="max-w-6xl xl:max-w-7xl 2xl:max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-6xl xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <span>© {new Date().getFullYear()} Harihara Subramanian V</span>
             <span>•</span>

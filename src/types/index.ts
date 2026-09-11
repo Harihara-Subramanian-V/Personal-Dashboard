@@ -3,7 +3,6 @@ export type ProjectCategory = 'ALL' | 'AI_ML_CV' | 'ROBOTICS_IOT' | 'CYBERSEC' |
 export interface Project {
   id: string;
   title: string;
-  codename: string;
   subtitle: string;
   description: string;
   longDescription: string;
@@ -12,10 +11,8 @@ export interface Project {
   techStack: string[];
   githubUrl: string;
   liveDemoUrl?: string;
-  clearance: 'TOP SECRET' | 'RESTRICTED' | 'UNCLASSIFIED' | 'CLASSIFIED';
-  status: 'DEPLOYED' | 'OPERATIONAL' | 'LAB PROTOTYPE' | 'ACTIVE REPO';
+  status: 'ACTIVE' | 'COMPLETED' | 'RESEARCH';
   year: string;
-  stars?: number;
   featured?: boolean;
   simulatorType?: 'augmentation' | 'flight-cli' | 'gesture-bot' | 'ctf-lab';
   metrics?: { label: string; value: string }[];
@@ -30,16 +27,17 @@ export interface ResearchPaper {
   description: string;
   focusAreas: string[];
   leadRole: string;
+  abstract?: string;
 }
 
-export interface SkillItem {
-  name: string;
-  level: number; // 0 - 100
-  levelLabel: string;
-  category: 'LANGUAGES' | 'AI_CV' | 'HARDWARE_IOT' | 'CYBERSEC_SYSTEMS' | 'DATABASES_TOOLS';
-  experience: string;
-  iconName?: string;
-  description: string;
+export interface SkillCategory {
+  title: string;
+  skills: {
+    name: string;
+    level: 'Core' | 'Advanced' | 'Proficient' | 'Intermediate';
+    experience: string;
+    description: string;
+  }[];
 }
 
 export interface HardwareSpec {
@@ -49,7 +47,7 @@ export interface HardwareSpec {
   clockSpeed: string;
   useCase: string;
   protocols: string[];
-  status: 'ONLINE' | 'STANDBY';
+  status: 'ACTIVE' | 'PRIMARY' | 'STANDBY';
 }
 
 export interface AchievementItem {
@@ -59,15 +57,7 @@ export interface AchievementItem {
   date: string;
   category: 'HACKATHON' | 'ROBOTICS' | 'CYBERSEC' | 'ACADEMIC' | 'DEVELOPMENT';
   badge: string;
-  badgeType?: 'gold' | 'silver' | 'orange' | 'cyan';
+  badgeType?: 'gold' | 'silver' | 'amber' | 'emerald' | 'cyan';
   description: string;
   tags: string[];
-}
-
-export interface TerminalOutput {
-  id: string;
-  type: 'input' | 'output' | 'error' | 'success' | 'system' | 'ascii';
-  text: string;
-  timestamp: string;
-  isHtml?: boolean;
 }

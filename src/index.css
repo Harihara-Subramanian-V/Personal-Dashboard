@@ -2,224 +2,83 @@
 
 @layer base {
   :root {
-    --color-neon-orange: #ff6b00;
-    --color-neon-amber: #ff8c00;
-    --color-neon-bright: #ffa726;
-    --color-neon-flame: #ff3e00;
-    --color-cyber-bg: #070709;
-    --color-cyber-surface: #0e0e13;
-    --color-cyber-card: #12121a;
-    --color-cyber-panel: rgba(18, 18, 26, 0.85);
-    --color-cyber-border: rgba(255, 107, 0, 0.3);
-    --color-cyber-border-glow: rgba(255, 107, 0, 0.6);
-    --color-cyber-text: #f0f2f5;
-    --color-cyber-muted: #8e95a5;
-    --font-orbitron: 'Orbitron', -apple-system, sans-serif;
-    --font-rajdhani: 'Rajdhani', -apple-system, sans-serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-display: 'Space Grotesk', 'Inter', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
-    --font-sans: 'Space Grotesk', -apple-system, sans-serif;
-  }
-
-  /* Force completely hide default Windows OS cursor across every single element */
-  *,
-  *::before,
-  *::after,
-  html,
-  body,
-  a,
-  button,
-  input,
-  textarea,
-  select,
-  label,
-  summary,
-  canvas,
-  svg,
-  div,
-  span,
-  p,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    box-sizing: border-box;
-    cursor: none !important;
-    border-radius: 0 !important; /* Strict sharp military brutalist edges */
   }
 
   html {
     scroll-behavior: smooth;
-    background-color: var(--color-cyber-bg);
-    color: var(--color-cyber-text);
-    font-family: var(--font-rajdhani);
+    background-color: #09090b;
+    color: #f4f4f5;
+    font-family: var(--font-sans);
     font-size: 16px;
-    overflow-x: hidden;
-    cursor: none !important;
   }
 
   body {
-    background-color: #070709;
-    color: #f0f2f5;
+    background-color: #09090b;
+    color: #f4f4f5;
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
-    letter-spacing: 0.02em;
-    cursor: none !important;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
   }
 
-  /* Custom Cyber Scrollbar */
+  /* Refined, Minimal Scrollbar */
   ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #070709;
-    border-left: 1px solid rgba(255, 107, 0, 0.2);
+    background: #09090b;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #ff6b00;
-    border-radius: 0;
+    background: #27272a;
+    border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #ffa726;
+    background: #3f3f46;
   }
 }
 
-/* Cyber Aesthetic Utility Classes */
-.font-orbitron {
-  font-family: var(--font-orbitron);
+/* Typography Utility Classes */
+.font-sans {
+  font-family: var(--font-sans);
 }
 
-.font-rajdhani {
-  font-family: var(--font-rajdhani);
+.font-display {
+  font-family: var(--font-display);
 }
 
 .font-mono {
   font-family: var(--font-mono);
 }
 
-.font-sans {
-  font-family: var(--font-sans);
+/* Glassmorphism & Subtle Card Utilities */
+.glass-panel {
+  background: rgba(18, 18, 22, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Neon Orange Accents */
-.text-neon-orange {
-  color: #ff6b00;
+.glass-panel-hover {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.text-neon-amber {
-  color: #ffa726;
+.glass-panel-hover:hover {
+  background: rgba(24, 24, 29, 0.85);
+  border-color: rgba(255, 255, 255, 0.16);
+  transform: translateY(-2px);
 }
 
-/* Cyber Card Backgrounds (Sharp Brutalist) */
-.cyber-card {
-  background: linear-gradient(135deg, rgba(14, 14, 20, 0.92) 0%, rgba(8, 8, 12, 0.98) 100%);
-  border: 1px solid rgba(255, 107, 0, 0.35);
-  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.5);
-  position: relative;
-  transition: border-color 0.2s ease;
-  border-radius: 0 !important;
+/* Ambient Dot Grid Background */
+.bg-grid-pattern {
+  background-size: 28px 28px;
+  background-image: 
+    radial-gradient(circle, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
 }
-
-.cyber-card:hover {
-  border-color: rgba(255, 107, 0, 0.7);
-}
-
-/* Cyber Button (Sharp Brutalist) */
-.cyber-btn {
-  position: relative;
-  font-family: var(--font-orbitron);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  transition: all 0.15s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  border-radius: 0 !important;
-}
-
-.cyber-btn-outline {
-  border: 1px solid #ff6b00;
-  color: #ff6b00;
-  background: rgba(255, 107, 0, 0.08);
-}
-
-.cyber-btn-outline:hover {
-  background: #ff6b00;
-  color: #070709;
-}
-
-.cyber-btn-solid {
-  background: #ff6b00;
-  color: #070709;
-  border: 1px solid #ffa726;
-  font-weight: 700;
-}
-
-.cyber-btn-solid:hover {
-  background: #ffa726;
-  color: #000;
-}
-
-/* Corner bracket tactical elements */
-.corner-bracket {
-  position: relative;
-}
-
-.corner-bracket::before,
-.corner-bracket::after {
-  content: '';
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  border-color: #ff6b00;
-  pointer-events: none;
-}
-
-.corner-bracket::before {
-  top: 0;
-  left: 0;
-  border-top: 2px solid #ff6b00;
-  border-left: 2px solid #ff6b00;
-}
-
-.corner-bracket::after {
-  bottom: 0;
-  right: 0;
-  border-bottom: 2px solid #ff6b00;
-  border-right: 2px solid #ff6b00;
-}
-
-/* Cinematic Slow Flowing Entrance Animations */
-@keyframes slowFlowFadeUp {
-  0% {
-    opacity: 0;
-    transform: translateY(24px);
-    filter: blur(4px);
-  }
-  60% {
-    filter: blur(0px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0px);
-  }
-}
-
-.animate-flow-1 { animation: slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both; }
-.animate-flow-2 { animation: slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.8s both; }
-.animate-flow-3 { animation: slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1.1s both; }
-.animate-flow-4 { animation: slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1.4s both; }
-.animate-flow-5 { animation: slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 1.7s both; }
-.animate-flow-6 { animation: slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 2.0s both; }
-.animate-flow-7 { animation: slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 2.3s both; }
-.animate-flow-8 { animation: slowFlowFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) 2.6s both; }
-
-

@@ -1,283 +1,170 @@
 import { useState, useEffect } from 'react';
-import { HudHeader, type DashboardLayer } from './components/HudHeader';
+import { Navbar } from './components/Navbar';
 import { CyberBackground } from './components/CyberBackground';
 import { HeroSection } from './components/HeroSection';
 import { ProjectsSection } from './components/ProjectsSection';
-import { SkillDefenseMatrix } from './components/SkillDefenseMatrix';
+import { ResearchSection } from './components/ResearchSection';
+import { HardwareSkillsSection } from './components/HardwareSkillsSection';
 import { AchievementsSection } from './components/AchievementsSection';
-import { PhotoGallerySection } from './components/PhotoGallerySection';
-import { CyberTerminal } from './components/CyberTerminal';
-import { SlideOverCommsDrawer } from './components/SlideOverCommsDrawer';
+import { ContactSection } from './components/ContactSection';
 import { ResumeDossierModal } from './components/ResumeDossierModal';
-import { WirelessDeviceScanner } from './components/WirelessDeviceScanner';
-import { CyberStarShooter } from './components/CyberStarShooter';
-import { CustomCursor } from './components/CustomCursor';
-import { Terminal, Mail } from 'lucide-react';
+import { CommandPalette } from './components/CommandPalette';
+import { ImageAugmentationModal } from './components/ImageAugmentationModal';
+import { GithubIcon, LinkedinIcon } from './components/SocialIcons';
+import { PROFILE_INFO } from './data/profileData';
+import { ArrowUp } from 'lucide-react';
 
-export function App() {
-  const [isIntro, setIsIntro] = useState<boolean>(true);
-  const [activeLayer, setActiveLayer] = useState<DashboardLayer>('overview');
-  const [isResumeOpen, setIsResumeOpen] = useState<boolean>(false);
-  const [isRfScannerOpen, setIsRfScannerOpen] = useState<boolean>(false);
-  const [isStarShooterOpen, setIsStarShooterOpen] = useState<boolean>(false);
-  const [isCommsOpen, setIsCommsOpen] = useState<boolean>(false);
-  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+export default function App() {
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [isAugmentationModalOpen, setIsAugmentationModalOpen] = useState(false);
 
-  // Secret global hotkey: Shift + S or ` (backtick) triggers hidden Star Shooter game
+  // Global hotkey: Cmd+K / Ctrl+K
   useEffect(() => {
-    const handleSecretKey = (e: KeyboardEvent) => {
-      if ((e.shiftKey && (e.key === 'S' || e.key === 's')) || e.key === '`' || e.key === '~') {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
         e.preventDefault();
-        setIsStarShooterOpen(true);
+        setIsCommandPaletteOpen((prev) => !prev);
       }
     };
 
-    window.addEventListener('keydown', handleSecretKey);
-    return () => window.removeEventListener('keydown', handleSecretKey);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const handleOpenProjectModal = (projectId: string) => {
-    setSelectedProjectId(projectId);
-    setActiveLayer('projects');
+  // RFC-6350 Compliant vCard Generator
+  const handleDownloadVCard = () => {
+    const vCardData = `BEGIN:VCARD
+VERSION:3.0
+N:V;Harihara Subramanian;;;
+FN:Harihara Subramanian V
+ORG:VIT Vellore & IIT Madras
+TITLE:Autonomous Robotics & Embedded Systems Engineer
+TEL;TYPE=CELL,VOICE:${PROFILE_INFO.phone}
+EMAIL;TYPE=PREF,INTERNET:${PROFILE_INFO.email}
+URL:${PROFILE_INFO.github}
+URL;TYPE=LinkedIn:${PROFILE_INFO.linkedin}
+ADR;TYPE=WORK:;;VIT Vellore / Chennai;Tamil Nadu;;India
+NOTE:Autonomous Robotics, Embedded IoT (ESP32-S3, STM32, AVR), Computer Vision Pipelines, and AI/ML.
+END:VCARD`;
+
+    const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'Harihara_Subramanian_V.vcf');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <div className="min-h-screen bg-[#070709] text-[#f0f2f5] relative font-rajdhani selection:bg-orange-500 selection:text-black">
-      {/* Custom Cyber Reticle Cursor */}
-      <CustomCursor />
-
-      {/* Static High-Performance Tactical Grid Background */}
+    <div className="min-h-screen bg-[#09090b] text-[#f4f4f5] relative font-sans selection:bg-amber-500/30 selection:text-amber-200">
+      
+      {/* Ambient Grid & Subtle Radial Glow Background */}
       <CyberBackground />
 
-      {/* Main Content Layout Container */}
-      <div className="relative z-10 flex flex-col min-h-screen">
-        {/* Top HUD Telemetry & Multi-Layer Navigation (Hidden during intro) */}
-        {!isIntro && (
-          <HudHeader
-            activeLayer={activeLayer}
-            onSelectLayer={(layer) => setActiveLayer(layer)}
-            onOpenResumeModal={() => setIsResumeOpen(true)}
-            onOpenRfScanner={() => setIsRfScannerOpen(true)}
-            onOpenComms={() => setIsCommsOpen(true)}
-          />
-        )}
-
-        {/* Tactical Layer Body Viewports */}
-        <main className="flex-1 max-w-7xl mx-auto px-4 py-3 w-full">
-          {/* LAYER 01: OVERVIEW & BIOGRAPHY */}
-          {activeLayer === 'overview' && (
-            <div className="animate-in fade-in duration-200">
-              <HeroSection
-                isIntro={isIntro}
-                onEnterDashboard={() => setIsIntro(false)}
-                onNavigateLayer={(layer) => setActiveLayer(layer)}
-                onOpenRfScanner={() => setIsRfScannerOpen(true)}
-                onOpenComms={() => setIsCommsOpen(true)}
-                onOpenResumeModal={() => setIsResumeOpen(true)}
-              />
-            </div>
-          )}
-
-          {/* LAYER 02: MISSIONS & LABS */}
-          {activeLayer === 'projects' && !isIntro && (
-            <div className="animate-in fade-in duration-200">
-              <ProjectsSection
-                selectedProjectId={selectedProjectId}
-                onClearSelectedProject={() => setSelectedProjectId(null)}
-              />
-            </div>
-          )}
-
-          {/* LAYER 03: CAPABILITIES & HARDWARE MATRIX */}
-          {activeLayer === 'capabilities' && !isIntro && (
-            <div className="animate-in fade-in duration-200">
-              <SkillDefenseMatrix />
-            </div>
-          )}
-
-          {/* LAYER 04: HONORS & RESEARCH PAPERS */}
-          {activeLayer === 'achievements' && !isIntro && (
-            <div className="animate-in fade-in duration-200">
-              <AchievementsSection />
-            </div>
-          )}
-
-          {/* LAYER 05: FIELD PHOTO GALLERY */}
-          {activeLayer === 'gallery' && !isIntro && (
-            <div className="animate-in fade-in duration-200">
-              <PhotoGallerySection />
-            </div>
-          )}
-
-          {/* LAYER 06: ROOT DEFENSE CLI TERMINAL */}
-          {activeLayer === 'terminal' && !isIntro && (
-            <div className="animate-in fade-in duration-200 max-w-5xl mx-auto space-y-4">
-              <div className="border-b border-orange-500/30 pb-2 flex items-center justify-between font-mono">
-                <div>
-                  <div className="text-xs text-orange-400 font-bold uppercase flex items-center gap-2">
-                    <Terminal className="w-4 h-4" /> [SECTION 06] // ROOT COMMAND LINE ACCESS
-                  </div>
-                  <h2 className="font-orbitron font-black text-xl sm:text-2xl text-white mt-0.5">
-                    INTERACTIVE DEFENSE CONSOLE
-                  </h2>
-                </div>
-                <span className="text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 border border-emerald-500/30">
-                  SSH PORT: 22 // AES-256
-                </span>
-              </div>
-
-              <CyberTerminal
-                onToggleMatrix={() => {}}
-                onOpenProject={handleOpenProjectModal}
-                onTriggerJumpscare={() => {}}
-                onOpenRfScanner={() => setIsRfScannerOpen(true)}
-                onOpenStarShooter={() => setIsStarShooterOpen(true)}
-                onOpenComms={() => setIsCommsOpen(true)}
-              />
-            </div>
-          )}
-
-          {/* LAYER 07: ENCRYPTED COMMS & TRANSMISSION */}
-          {activeLayer === 'contact' && !isIntro && (
-            <div className="animate-in fade-in duration-200 max-w-3xl mx-auto space-y-4 font-mono text-xs">
-              <div className="border-b border-orange-500/30 pb-2 flex items-center justify-between">
-                <div>
-                  <div className="text-xs text-emerald-400 font-bold uppercase flex items-center gap-2">
-                    <Mail className="w-4 h-4" /> [SECTION 07] // ENCRYPTED COMMS BEACON
-                  </div>
-                  <h2 className="font-orbitron font-black text-xl text-white mt-0.5">
-                    ESTABLISH DIRECT TRANSMISSION
-                  </h2>
-                </div>
-                <button
-                  onClick={() => setIsCommsOpen(true)}
-                  className="px-3 py-1.5 bg-orange-500 hover:bg-orange-400 text-black font-bold font-orbitron text-xs"
-                >
-                  OPEN DRAWER
-                </button>
-              </div>
-
-              <div className="cyber-card p-5 border border-orange-500/40 space-y-3">
-                <div className="text-white font-bold font-orbitron text-sm">DIRECT OPERATOR CHANNELS:</div>
-                <div className="p-3 bg-black border border-neutral-800 space-y-1">
-                  <div className="text-neutral-400 text-[10px]">EMAIL (PRIMARY INBOX):</div>
-                  <div className="text-orange-400 font-bold text-sm select-all">harishv2911@gmail.com</div>
-                </div>
-                <div className="p-3 bg-black border border-neutral-800 space-y-1">
-                  <div className="text-neutral-400 text-[10px]">DIRECT TELEPHONE LINE:</div>
-                  <div className="text-emerald-400 font-bold text-sm select-all">+91 93423 46217</div>
-                </div>
-                <div className="p-3 bg-black border border-neutral-800 space-y-1">
-                  <div className="text-neutral-400 text-[10px]">CURRENT NODE LOCATION:</div>
-                  <div className="text-white font-bold">Vellore Institute of Technology (VIT), Tamil Nadu, India</div>
-                </div>
-              </div>
-            </div>
-          )}
-        </main>
-
-        {/* Cyberpunk Sharp Telemetry Footer (Hidden during intro) */}
-        {!isIntro && (
-          <footer className="mt-8 border-t border-orange-500/30 bg-black py-4 px-4 font-mono text-xs text-neutral-400 animate-flow-8">
-            <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-orange-500 inline-block" />
-                <div>
-                  <div className="font-orbitron font-bold text-white text-xs">
-                    HARIHARA SUBRAMANIAN V
-                  </div>
-                  <div className="text-[10px] text-orange-400">
-                    VIT Vellore (B.Tech IT) & IIT Madras (BS Data Science)
-                  </div>
-                </div>
-              </div>
-
-              {/* Quick Layer Switcher Pills in Footer */}
-              <div className="flex flex-wrap items-center gap-1 font-mono text-[10px]">
-                <button
-                  onClick={() => setActiveLayer('overview')}
-                  className={`px-2 py-0.5 border ${activeLayer === 'overview' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
-                >
-                  01_OVERVIEW
-                </button>
-                <button
-                  onClick={() => setActiveLayer('projects')}
-                  className={`px-2 py-0.5 border ${activeLayer === 'projects' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
-                >
-                  02_MISSIONS
-                </button>
-                <button
-                  onClick={() => setActiveLayer('capabilities')}
-                  className={`px-2 py-0.5 border ${activeLayer === 'capabilities' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
-                >
-                  03_CAPABILITIES
-                </button>
-                <button
-                  onClick={() => setActiveLayer('achievements')}
-                  className={`px-2 py-0.5 border ${activeLayer === 'achievements' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
-                >
-                  04_HONORS
-                </button>
-                <button
-                  onClick={() => setActiveLayer('gallery')}
-                  className={`px-2 py-0.5 border ${activeLayer === 'gallery' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
-                >
-                  05_GALLERY
-                </button>
-                <button
-                  onClick={() => setActiveLayer('terminal')}
-                  className={`px-2 py-0.5 border ${activeLayer === 'terminal' ? 'bg-orange-500 text-black border-orange-400 font-bold' : 'border-neutral-800 text-neutral-400 hover:text-white'}`}
-                >
-                  06_CLI
-                </button>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setIsIntro(true)}
-                  className="px-2 py-1 bg-black hover:bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white text-[10px] font-mono"
-                  title="Return to Name Splash Gate"
-                >
-                  [GATE SCREEN]
-                </button>
-                <button
-                  onClick={() => setIsCommsOpen(true)}
-                  className="px-2.5 py-1 bg-neutral-900 hover:bg-orange-500 hover:text-black border border-orange-500/40 text-orange-400 text-[11px] font-bold font-orbitron"
-                >
-                  COMMS
-                </button>
-              </div>
-            </div>
-          </footer>
-        )}
-      </div>
-
-      {/* Persistent Side Comms Link Drawer */}
-      <SlideOverCommsDrawer
-        isOpen={isCommsOpen}
-        onClose={() => setIsCommsOpen(false)}
-        onOpen={() => setIsCommsOpen(true)}
+      {/* Fixed Sticky Glass Navbar */}
+      <Navbar
+        onOpenResumeModal={() => setIsResumeOpen(true)}
+        onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
       />
 
-      {/* CV Dossier Modal */}
+      {/* Main Single-Page Content Container */}
+      <main className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 space-y-4">
+        
+        {/* About & Hero Section */}
+        <HeroSection
+          onOpenResumeModal={() => setIsResumeOpen(true)}
+          onDownloadVCard={handleDownloadVCard}
+        />
+
+        {/* Projects Section */}
+        <ProjectsSection
+          onOpenAugmentationModal={() => setIsAugmentationModalOpen(true)}
+        />
+
+        {/* Research & Publications Section */}
+        <ResearchSection />
+
+        {/* Hardware Architecture & Technical Skills Section */}
+        <HardwareSkillsSection />
+
+        {/* Achievements & Recognition Section */}
+        <AchievementsSection />
+
+        {/* Contact & vCard Section */}
+        <ContactSection
+          onDownloadVCard={handleDownloadVCard}
+        />
+
+      </main>
+
+      {/* Clean Footer */}
+      <footer className="relative z-10 border-t border-zinc-800/80 mt-20 py-8 text-xs text-zinc-500 font-sans">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span>© {new Date().getFullYear()} Harihara Subramanian V</span>
+            <span>•</span>
+            <span>VIT Vellore & IIT Madras</span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <a
+              href={PROFILE_INFO.github}
+              target="_blank"
+              rel="noreferrer"
+              className="text-zinc-400 hover:text-zinc-200 transition-colors"
+            >
+              <GithubIcon className="w-4 h-4" />
+            </a>
+            <a
+              href={PROFILE_INFO.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              className="text-zinc-400 hover:text-zinc-200 transition-colors"
+            >
+              <LinkedinIcon className="w-4 h-4" />
+            </a>
+            <button
+              onClick={scrollToTop}
+              className="flex items-center gap-1 text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer"
+              title="Back to top"
+            >
+              <span>Top</span>
+              <ArrowUp className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+      </footer>
+
+      {/* Modals & Overlays */}
       <ResumeDossierModal
         isOpen={isResumeOpen}
         onClose={() => setIsResumeOpen(false)}
       />
 
-      {/* Wireless WiFi & Bluetooth Device Scanner Modal */}
-      <WirelessDeviceScanner
-        isOpen={isRfScannerOpen}
-        onClose={() => setIsRfScannerOpen(false)}
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        onOpenResumeModal={() => setIsResumeOpen(true)}
+        onOpenProjectModal={() => {
+          const el = document.getElementById('projects');
+          el?.scrollIntoView({ behavior: 'smooth' });
+        }}
+        onDownloadVCard={handleDownloadVCard}
       />
 
-      {/* Cyber Star Shooter Arcade Game */}
-      <CyberStarShooter
-        isOpen={isStarShooterOpen}
-        onClose={() => setIsStarShooterOpen(false)}
+      <ImageAugmentationModal
+        isOpen={isAugmentationModalOpen}
+        onClose={() => setIsAugmentationModalOpen(false)}
       />
+
     </div>
   );
 }
-
-export default App;
